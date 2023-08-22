@@ -48,6 +48,12 @@ jobs:
       with:
         version: v3.12.1
 
+    - name: "Set up python"
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        check-latest: true
+
     - name: Determine check-parameters
       id: params
       run: |
@@ -65,7 +71,7 @@ jobs:
       if: steps.params.outputs.params != '--all'
       id: changes
       run: |
-        ct -d list-changed ${{ steps.params.outputs.params }}
+        ct list-changed ${{ steps.params.outputs.params }}
         CHANGES=$(ct list-changed ${{ steps.params.outputs.params }})
         if [ -z "$CHANGES" ]; then
           echo "changed=false" >> "$GITHUB_OUTPUT"
