@@ -68,7 +68,7 @@ jobs:
 
     - name: Commit changes
       if: steps.updates.outputs.changed
-      run: git commit -amv "Updated appVersion to ${{ inputs.appVersion || github.event.client_payload.appVersion }}"
+      run: git commit -v -am "Updated appVersion to ${{ inputs.appVersion || github.event.client_payload.appVersion }}"
 
     - name: Push changes
       if: steps.updates.outputs.changed && inputs.skip-push != true
