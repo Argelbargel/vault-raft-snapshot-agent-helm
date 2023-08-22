@@ -59,6 +59,10 @@ jobs:
     - determine-release-version
     - check-charts
 
+    permissions:
+      contents: write
+      pages: write
+
     steps:
     - name: Checkout
       uses: actions/checkout@v1
