@@ -12,6 +12,9 @@ concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  PUSH_TOKEN: ${{ secrets.PROTECTED_PUSH_TOKEN }}
+
 jobs:
   release-readme:
     runs-on: ubuntu-latest
@@ -21,15 +24,23 @@ jobs:
       pages: write
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout 
+        uses: actions/checkout@v3
 
-      - run: |
-          cp -f README.md ${{ runner.temp }}/README.md
-      - uses: actions/checkout@v3
+      - run: cp -f README.md ${{ runner.temp }}/README.md
+
+      - name: Ensure PUSH_TOKEN is set
+        if: env.PUSH_TOKEN == ''
+        run: echo "PUSH_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+
+      - name: Checkout Pages
+        uses: actions/checkout@v3
         with:
           ref: gh-pages
           token: ${{ secrets.GITHUB_TOKEN }}
-      - run: |
+
+      - name: Sync README.md to pages
+        run: |
           cp -f ${{ runner.temp }}/README.md .
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
