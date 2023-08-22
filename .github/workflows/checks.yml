@@ -65,7 +65,7 @@ jobs:
       if: steps.params.outputs.params != '--all'
       id: changes
       run: |
-        ct list-changed ${{ steps.params.outputs.value }}
+        ct -d list-changed ${{ steps.params.outputs.params }}
         CHANGES=$(ct list-changed ${{ steps.params.outputs.params }})
         if [ -z "$CHANGES" ]; then
           echo "changed=false" >> "$GITHUB_OUTPUT"
