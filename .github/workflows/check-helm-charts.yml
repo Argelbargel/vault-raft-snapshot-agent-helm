@@ -29,6 +29,7 @@ jobs:
         latest: true
         draft: false
         prerelease: true
+        doNotFailIfNotFound: true
 
     - name: Dump context
       run: |
