@@ -32,7 +32,11 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Install helm-docs
-      run: "curl --silent --show-error --fail --location --output /tmp/helm-docs.tar.gz \\\n    https://github.com/norwoodj/helm-docs/releases/download/v\"${HELM_DOCS_VERSION}\"/helm-docs_\"${HELM_DOCS_VERSION}\"_Linux_x86_64.tar.gz\ntar -xf /tmp/helm-docs.tar.gz helm-docs      \n    #magic___^_^___line\n"
+      run: |
+        curl --silent --show-error --fail --location --output /tmp/helm-docs.tar.gz \
+             https://github.com/norwoodj/helm-docs/releases/download/v${HELM_DOCS_VERSION}/helm-docs_${HELM_DOCS_VERSION}_Linux_x86_64.tar.gz
+        tar -xf /tmp/helm-docs.tar.gz /tmp/helm-docs
+
     - name: Prepare READMEs
       run: |
         mkdir -p $TEMP_DIR
@@ -40,7 +44,7 @@ jobs:
 
         /tmp/helm-docs
         while IFS= read -r -d $'\0' readme; do
-          CHART_NAME=$(basename $(dirname $chart))
+          CHART_NAME=$(basename $(dirname $readme))
           mkdir -p $TEMP_DIR/$CHART_NAME
           mv $readme $TEMP_DIR/$CHART_NAME/
         done < <(find "$CHARTS_DIR" -type f -name README.md -print0)
