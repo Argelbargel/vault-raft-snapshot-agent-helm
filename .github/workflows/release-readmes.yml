@@ -52,7 +52,7 @@ jobs:
           mv $readme $TEMP_DIR/$CHART_NAME/
         done < <(find "$CHARTS_DIR" -type f -name README.md -print0)
 
-
+        ls -al $TEMP_DIR/*  
 
 
     - name: Ensure PUSH_TOKEN is set
@@ -66,4 +66,9 @@ jobs:
         token: ${{ env.PUSH_TOKEN }}
 
     - name: Sync README.md to pages
-      run: "cp -rf $TEMP_DIR/* .\ngit config user.name \"$GITHUB_ACTOR\"\ngit config user.email \"$GITHUB_ACTOR@users.noreply.github.com\"\ngit commit --signoff -am \"Sync READMEs for ${{github.ref_name}}\"\ngit push  \n"
+      run: |
+        cp -rf $TEMP_DIR/* .
+        git config user.name $GITHUB_ACTOR
+        git config user.email $GITHUB_ACTOR@users.noreply.github.com
+        git commit --signoff -am \"Sync READMEs for ${{github.ref_name}}
+        git push
