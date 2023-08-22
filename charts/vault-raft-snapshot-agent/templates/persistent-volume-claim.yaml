@@ -24,7 +24,7 @@ spec:
     - {{ $pvc.accessMode | default "ReadWriteMany" }}
   {{- with $pvc.volumeMode }}
   volumeMode: {{ $pvc.volumeMode }}
-  {{- }}
+  {{- end }}
   resources:
     {{- if not (empty $pvc.resources) }}
     {{- toYaml $pvc.resources | nindent 4 }}
@@ -35,5 +35,5 @@ spec:
   {{- with $pvc.selector }}
   selector: 
     {{- toYaml $pvc.selector | nindent 4 }}
-  {{- }}
+  {{- end }}
 {{- end }}    
