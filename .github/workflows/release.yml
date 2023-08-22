@@ -37,10 +37,11 @@ jobs:
       run: |
         cat << EOF
           ${{ toJson(steps.release-version.outputs )}}
+          ${{ inputs.skip-checks }}
         EOF
 
   check-charts:
-    if: inputs.skip-checks
+    if: "! ${{ inputs.skip-checks }}"
     needs:
     - determine-release-version
     uses: ./.github/workflows/checks.yml
