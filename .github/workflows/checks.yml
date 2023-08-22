@@ -69,7 +69,7 @@ jobs:
 
         if [ "$PARAMS" != "--all" ]; then
           CHANGES=$(ct list-changed $PARAMS)
-          if [[ -z "$changes" ]]; then
+          if [[ -z "$CHANGES" ]]; then
             CHANGED=false
           fi
         fi
