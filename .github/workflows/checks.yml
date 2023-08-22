@@ -29,6 +29,9 @@ on:
     - "charts/**"
     - ".github/workflows/checks.yml"
 
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   check-charts:
@@ -46,7 +49,7 @@ jobs:
         PARAMS=--all
         CHANGED=true
 
-        if [ "${{ inputs.target-branch }}" != "" ]; then
+        if [[ "${{ inputs.target-branch }}" =~ ^v[[:digit:]] ]] && [ "${{ inputs.target-branch }}" != "v0.0.0" ]; then
           PARAMS=--target-branch=${{ inputs.target-branch }}
         elif [ "${{ github.event_name}}" == "pull_request" ]; then
           PARAMS=--target-branch=${{ github.event.repository.default_branch }}
