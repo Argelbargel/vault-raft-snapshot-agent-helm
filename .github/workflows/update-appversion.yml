@@ -10,7 +10,7 @@ on:
       push:
         description: "should updates to charts be pushed?"
         type: boolean
-        required: true
+        default: true
   repository_dispatch:
     types: [update-vault-raft-snapshot-agent-images]
 
