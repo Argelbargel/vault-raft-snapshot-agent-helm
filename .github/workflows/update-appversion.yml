@@ -35,11 +35,14 @@ jobs:
         APP_VERSION=${{ inputs.appVersion || github.event.client_payload.appVersion }}
         echo "New appVersion: $APP_VERSION"
         while IFS= read -r -d $'\0' chart; do
-          echo "Updating $chart..."
-          CURRENT_CHART_VERSION=$(sed -n 's/^version:\s*\([^\n]*\)/\1/p')
-          echo " - current version: $CURRENT_CHART_VERSION"
-          NEW_CHART_VERSION=$(/tmp/semver bump patch $CURRENT_CHART_VERSION)
-          echo " - new version: $NEW_CHART_VERSION"
-          sed -n 's/^(appVersion:\s*)[^\n]*/\1"${APP_VERSION}"/p'
-          sed -n 's/^(version:\s*)[^\n]*/\1"${NEW_CHART_VERSION}"/p'
+          CURRENT_APP_VERSION=$(sed -n 's/^appVersion:\s*\([^\n]*\)/\1/p' $chart)
+          #if [ "$CURRENT_APP_VERSION" != "$APP_VERSION" ]; then
+            echo "Updating $chart..."
+            CURRENT_CHART_VERSION=$(sed -n 's/^version:\s*\([^\n]*\)/\1/p' $chart)
+            echo " - current version: $CURRENT_CHART_VERSION"
+            NEW_CHART_VERSION=$(/tmp/semver bump patch $CURRENT_CHART_VERSION)
+            echo " - new version: $NEW_CHART_VERSION"
+            sed -n 's/^(appVersion:\s*)[^\n]*/\1"${APP_VERSION}"/p' $chart
+            sed -n 's/^(version:\s*)[^\n]*/\1"${NEW_CHART_VERSION}"/p' $chart
+          #fi
         done < <(find "${{ env.CHARTS_DIR }}" -type f -name Chart.yaml -print0)
