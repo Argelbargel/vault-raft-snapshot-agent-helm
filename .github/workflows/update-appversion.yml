@@ -74,9 +74,9 @@ jobs:
         echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
 
     - name: Commit changes
-      if: steps.updates.outputs.changed == "true"
+      if: steps.updates.outputs.changed == 'true'
       run: git commit -v -am "Updated appVersion to ${{ inputs.appVersion || github.event.client_payload.appVersion }}"
 
     - name: Push changes
-      if: steps.updates.outputs.changed == "true" && inputs.skip-push != true
+      if: steps.updates.outputs.changed == 'true' && inputs.skip-push != true
       run: git push

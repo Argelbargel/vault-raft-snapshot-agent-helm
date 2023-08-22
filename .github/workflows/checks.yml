@@ -66,13 +66,13 @@ jobs:
         echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
 
     - name: Set up Helm
-      if: steps.changes.outputs.changed
+      if: steps.changes.outputs.changed == 'true'
       uses: azure/setup-helm@v3
       with:
         version: v3.12.1
 
     - name: Lint changed charts
-      if: steps.changes.outputs.changed
+      if: steps.changes.outputs.changed == 'true'
       run: |
         ct lint ${{steps.changes.outputs.params }}
 
@@ -81,7 +81,7 @@ jobs:
       uses: helm/kind-action@v1.7.0
 
     - name: Install charts
-      if: steps.changes.outputs.changed
+      if: steps.changes.outputs.changed == 'true'
       run: |
         ct install ${{steps.changes.outputs.params }}
 
