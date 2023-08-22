@@ -36,7 +36,7 @@ jobs:
     - name: Dump release-version-infos
       run: |
         cat << EOF
-          {{ toJson(steps.release-version.outputs )}}
+          ${{ toJson(steps.release-version.outputs )}}
         EOF
 
   check-charts:
