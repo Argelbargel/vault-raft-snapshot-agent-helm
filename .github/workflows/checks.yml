@@ -46,7 +46,7 @@ jobs:
         PARAMS=--all
         CHANGED=true
 
-        if [ "${{ inputs.target-branch }}" != "" ]; then
+        if [[ "${{ inputs.target-branch }}" =~ ^v[[:digit:]] ]]; then
           PARAMS=--target-branch=${{ inputs.target-branch }}
         elif [ "${{ github.event_name}}" == "pull_request" ]; then
           PARAMS=--target-branch=${{ github.event.repository.default_branch }}
