@@ -56,7 +56,7 @@ jobs:
         APP_VERSION=${{ inputs.appVersion || github.event.client_payload.appVersion }}
         echo "New appVersion: $APP_VERSION"
         while IFS= read -r -d $'\0' chart; do
-          CURRENT_APP_VERSION=$(sed -n 's/^appVersion:\s*"\([^"]*\)/"\1/p' $chart)
+          CURRENT_APP_VERSION=$(sed -n 's/^appVersion:\s*"\([^"]*\)"/\1/p' $chart)
           echo "chart $(basename $(dirname $chart)) has appVersion: $CURRENT_APP_VERSION"
           if [ "$CURRENT_APP_VERSION" != "$APP_VERSION" ]; then
             echo "Updating $chart..."
