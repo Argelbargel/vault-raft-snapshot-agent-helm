@@ -22,14 +22,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - run: |
           cp -f README.md ${{ runner.temp }}/README.md
       - uses: actions/checkout@v3
         with:
           ref: gh-pages
+          token: ${{ secrets.GITHUB_TOKEN }}
       - run: |
           cp -f ${{ runner.temp }}/README.md .
           git config user.name "$GITHUB_ACTOR"
