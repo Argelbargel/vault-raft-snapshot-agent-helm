@@ -65,17 +65,12 @@ jobs:
       if: steps.params.outputs.params != '--all'
       id: changes
       run: |
-        CHANGED=false
-
-        if [ "$PARAMS" != "--all" ]; then
-          ct list-changed ${{ steps.params.outputs.value }}
-          CHANGES=$(ct list-changed ${{ steps.params.outputs.params }})
-          if [ -n "$CHANGES" ]; then
-            CHANGED=true
-          fi
+        ct list-changed ${{ steps.params.outputs.value }}
+        CHANGES=$(ct list-changed ${{ steps.params.outputs.params }})
+        if [ -z "$CHANGES" ]; then
+          echo "changed=false" >> "$GITHUB_OUTPUT"
         fi
 
-        echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
 
     - name: Lint changed charts
       if: steps.changes.outputs.changed != 'false'
