@@ -1,0 +1,68 @@
+name: Release READMEs
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+    - "v**"
+    paths:
+    - 'README.md'
+    - 'charts/**/README.md.gotmpl'
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CHARTS_DIR: ./charts
+  TEMP_DIR: /tmp/readmes
+  PUSH_TOKEN: ${{ secrets.PROTECTED_PUSH_TOKEN }}
+
+jobs:
+  release-readme:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pages: write
+
+    steps:
+      - name: Checkout 
+        uses: actions/checkout@v3
+
+      - name: Install helm-docs
+        run: |
+          curl --silent --show-error --fail --location --output /tmp/helm-docs.tar.gz \
+              https://github.com/norwoodj/helm-docs/releases/download/v"${HELM_DOCS_VERSION}"/helm-docs_"${HELM_DOCS_VERSION}"_Linux_x86_64.tar.gz
+          tar -xf /tmp/helm-docs.tar.gz helm-docs      
+
+      - name: Prepare READMEs
+        run: |
+          mkdir -p $TEMP_DIR
+          cp -f README.md $TEMP_DIR/README.md
+
+          /tmp/helm-docs
+          while IFS= read -r -d $'\0' readme; do
+            CHART_NAME=$(basename $(dirname $chart))
+            mkdir -p $TEMP_DIR/$CHART_NAME
+            mv $readme $TEMP_DIR/$CHART_NAME/
+          done < <(find "$CHARTS_DIR" -type f -name README.md -print0)
+
+
+      - name: Ensure PUSH_TOKEN is set
+        if: env.PUSH_TOKEN == ''
+        run: echo "PUSH_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+
+      - name: Checkout Pages
+        uses: actions/checkout@v3
+        with:
+          ref: gh-pages
+          token: ${{ env.PUSH_TOKEN }}
+
+      - name: Sync README.md to pages
+        run: |
+          cp -rf $TEMP_DIR/* .
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          git commit --signoff -am "Sync READMEs for ${{github.ref_name}}"
+          git push  

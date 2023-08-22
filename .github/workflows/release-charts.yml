@@ -84,9 +84,10 @@ jobs:
              https://github.com/norwoodj/helm-docs/releases/download/v"${HELM_DOCS_VERSION}"/helm-docs_"${HELM_DOCS_VERSION}"_Linux_x86_64.tar.gz
         tar -xf /tmp/helm-docs.tar.gz helm-docs      
 
-    - name: Create README for charts
+    - name: Replace templates with actual README for charts
       run: |
         ./helm-docs
+        find $CHARTS_DIR -type f -name README.md.gotmpl -exec rm {} +
 
     - name: Run chart-releaser
       uses: helm/chart-releaser-action@v1.5.0
