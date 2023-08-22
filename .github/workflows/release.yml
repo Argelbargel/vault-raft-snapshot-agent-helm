@@ -38,12 +38,6 @@ jobs:
         version_format: "${major}.${minor}.${patch}"
         search_commit_body: true
 
-    - name: Dump release-version-infos
-      run: |
-        cat << EOF
-          ${{ toJson(steps.release-version.outputs )}}
-        EOF
-
   check-charts:
     if: github.event.inputs.skip-checks != 'true'
     needs:
