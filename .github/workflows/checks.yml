@@ -71,7 +71,7 @@ jobs:
       if: steps.params.outputs.params != '--all'
       id: changes
       run: |
-        strace -s 1024 -f ct list-changed ${{ steps.params.outputs.params }} 2>&1 | egrep 'execve|write|exit 
+        strace -s 1024 -f ct list-changed ${{ steps.params.outputs.params }} 2>&1 | egrep 'execve|write|exit'
         CHANGES=$(ct list-changed ${{ steps.params.outputs.params }})
         if [ -z "$CHANGES" ]; then
           echo "changed=false" >> "$GITHUB_OUTPUT"
