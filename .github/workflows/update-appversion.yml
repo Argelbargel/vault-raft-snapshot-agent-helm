@@ -15,7 +15,7 @@ env:
 
 jobs:
   update-app-version:
-    if: (inputs.appVersion || github.event.client_payload.appVersion) != ""
+    if: (inputs.appVersion || github.event.client_payload.appVersion) != ''
     runs-on: ubuntu-latest
     steps:
     - name: "Checkout repository"
