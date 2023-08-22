@@ -7,10 +7,10 @@ on:
         description: "which appVersion to set in the charts?"
         type: string
         required: true
-      push:
-        description: "should updates to charts be pushed?"
+      skip-push:
+        description: "should updates not be pushed to repo?"
         type: boolean
-        default: true
+        default: false
   repository_dispatch:
     types: [update-vault-raft-snapshot-agent-images]
 
@@ -21,6 +21,10 @@ jobs:
   update-app-version:
     if: (inputs.appVersion || github.event.client_payload.appVersion) != ''
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
     steps:
     - name: "Checkout repository"
       uses: actions/checkout@v3
@@ -64,8 +68,8 @@ jobs:
 
     - name: Commit changes
       if: steps.updates.outputs.changed
-      run: git commit -am "Updated appVersion to ${{ inputs.appVersion || github.event.client_payload.appVersion }}"
+      run: git commit -amv "Updated appVersion to ${{ inputs.appVersion || github.event.client_payload.appVersion }}"
 
     - name: Push changes
-      if: steps.updates.outputs.changed && (inputs.push == '' || inputs.push == true)
+      if: steps.updates.outputs.changed && inputs.skip-push != true
       run: git push
