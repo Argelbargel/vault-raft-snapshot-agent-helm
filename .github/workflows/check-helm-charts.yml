@@ -33,6 +33,6 @@ jobs:
 
     - name: Dump context
       run: |
-        echo ${{ toJson(github) }}
-        echo ${{ toJson(steps.latest-release.outputs )}}
+        echo "${{ toJson(github) }}"
+        echo "${{ toJson( steps.latest-release.outputs )}}"
 
