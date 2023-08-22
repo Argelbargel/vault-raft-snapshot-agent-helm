@@ -61,6 +61,7 @@ jobs:
         fi
 
         if [ "$PARAMS" != "--all" ]; then
+          ct list-changed $PARAMS
           CHANGES=$(ct list-changed $PARAMS)
           if [[ -z "$CHANGES" ]]; then
             CHANGED=false
