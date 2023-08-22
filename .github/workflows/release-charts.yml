@@ -31,6 +31,10 @@ jobs:
       previous: v${{ steps.release-version.outputs.previous_version }}
 
     steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
     - name: Determine Release-Version
       id: release-version
       uses: paulhatch/semantic-version@v5.1.0
@@ -72,7 +76,7 @@ jobs:
     - name: Install Helm
       uses: azure/setup-helm@v3
       with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Install helm-docs
       run: |
