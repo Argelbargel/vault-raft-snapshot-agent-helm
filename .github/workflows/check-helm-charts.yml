@@ -28,7 +28,7 @@ jobs:
       with:
         latest: true
         draft: false
-        prereleased: true
+        prerelease: true
 
     - name: Dump context
       run: |
