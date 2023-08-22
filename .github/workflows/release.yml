@@ -8,7 +8,7 @@ on:
     tags-ignore:
     - "**-v**"
     paths:
-    - '**/Chart.yaml'
+    - 'charts/**/Chart.yaml'
 
 env:
   CHARTS_DIR: ./charts
