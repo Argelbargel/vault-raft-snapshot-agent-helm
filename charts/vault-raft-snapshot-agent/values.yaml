@@ -20,7 +20,8 @@ deployment:
   revisionHistoryLimit:
 
 # -- defines the contents of the configuration-file for vault-raft-snapshot-agent
-#    excpet for `local_storage` the keys and values are the same as [documented here](https://github.com/Argelbargel/vault-raft-snapshot-agent)
+#    except for `local_storage` the keys and values are the same as in the agents 
+#    [configuration file](https://github.com/Argelbargel/vault-raft-snapshot-agent)
 config:
   addr: http://127.0.0.1:8200
   vault_auth_method: k8s
