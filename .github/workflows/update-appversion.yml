@@ -1,11 +1,39 @@
 name: Update Charts appVersion
 
 on:
+  workflow_dispatch:
+    inputs:
+      appVersion:
+        description: "which appVersion to set in the charts?"
+        type: string
+        required: true
   repository_dispatch:
     types: [update-vault-raft-snapshot-agent-images]
 
+env:
+  CHARTS_DIR: ./charts
+
 jobs:
-  myEvent:
+  update-app-version:
+    if: (inputs.appVersion || github.event.client_payload.appVersion) != ""
     runs-on: ubuntu-latest
     steps:
-    - run: echo ${{ github.event.client_payload.appVersion }}
+    - name: "Checkout repository"
+      uses: actions/checkout@v3
+      with:
+        ref: master
+
+    - name: Download semver shell utility
+      run: |
+        wget -O /tmp/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/master/src/semver
+        chmod +x /tmp/semver\n/tmp/semver --version
+
+    - name: Update charts
+      run: |
+        while IFS= read -r -d $'\0' chart; do
+          echo "Updating $chart..."
+          CURRENT_CHART_VERSION=$(sed -n 's/^version:\s*\([^\n]*\)/\1/p')
+          NEW_CHART_VERSION=$(/tmp/semver bump patch $CURRENT_CHART_VERSION)
+          sed -n 's/^(appVersion:\s*)[^\n]*/\1"${{ inputs.appVersion || github.event.client_payload.appVersion }}"/p'
+          sed -n 's/^(version:\s*)[^\n]*/\1"${NEW_CHART_VERSION}"/p'
+        done < <(find "${{ env.CHARTS_DIR }}" -type f --name Chart.yaml -print0)
