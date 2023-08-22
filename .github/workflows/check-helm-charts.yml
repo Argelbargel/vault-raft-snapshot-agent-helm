@@ -20,49 +20,18 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v1
 
-    - name: Set up Helm
-      uses: azure/setup-helm@v3
+    - name: Determine latest (Pre-)Release
+      uses: cardinalby/git-get-release-action@v1
+      id: latest-release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        version: v3.12.1
+        latest: true
+        draft: false
+        prereleased: true
 
-    - uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
-        check-latest: true
-
-    - name: Set-up chart testing
-      uses: helm/chart-testing-action@v2.4.0
-
-    - name: Check charts for changes
-      if: github.event_name == 'pull_request'
-      id: chart-changes
+    - name: Dump context
       run: |
-        changed=$(ct list-changed --target-branch ${{ steps.determine-target.outputs.target }})
-        if [[ -n "$changed" ]]; then
-          echo "changed=true" >> "$GITHUB_OUTPUT"
-        fi
-
-    - name: Lint changed charts
-      if: steps.chart-changes.outputs.changed
-      run: |
-        ct lint --target-branch ${{ steps.determine-target.outputs.target }}
-
-    - name: Lint all charts
-      if: github.event_name != 'pull_request'
-      run: |
-        ct lint --all
-
-    - name: Create kind cluster
-      if: github.event_name != 'pull_request' || steps.list-changed.outputs.changed == 'true'
-      uses: helm/kind-action@v1.7.0
-
-    - name: Install changed charts
-      if: steps.list-changed.outputs.changed == 'true'
-      run: |
-        ct install  --target-branch ${{ github.event.repository.default_branch }}
-
-    - name: Install all charts
-      if: github.event_name != 'pull_request'
-      run: |
-        ct install  --all
+        echo ${{ toJson(github) }}
+        echo ${{ toJson(steps.latest-release.outputs )}}
 
