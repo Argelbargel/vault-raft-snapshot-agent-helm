@@ -53,6 +53,7 @@ jobs:
       target-branch: ${{ needs.determine-release-version.previous }}
 
   release-charts:
+    if: always() && !cancelled() && !failure() 
     runs-on: ubuntu-latest
     needs:
     - determine-release-version
