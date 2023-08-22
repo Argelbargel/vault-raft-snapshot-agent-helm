@@ -39,49 +39,51 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
 
     - name: Set-up chart testing
       uses: helm/chart-testing-action@v2.4.0
 
-    - name: Determine changes
-      id: changes
+    - name: Determine check-parameters
+      id: params
       run: |
         PARAMS=--all
-        CHANGED=true
 
         if [[ "${{ inputs.target-branch }}" =~ ^v[[:digit:]] ]] && [ "${{ inputs.target-branch }}" != "v0.0.0" ]; then
-          PARAMS=--target-branch=${{ inputs.target-branch }}
+          PARAMS="--target-branch ${{ inputs.target-branch }}"
         elif [ "${{ github.event_name}}" == "pull_request" ]; then
-          PARAMS=--target-branch=${{ github.event.repository.default_branch }}
-        fi
-
-        if [ "$PARAMS" != "--all" ]; then
-          CHANGES=$(ct list-changed $PARAMS)
-          if [[ -z "$CHANGES" ]]; then
-            CHANGED=false
-          fi
+          PARAMS="--target-branch ${{ github.event.repository.default_branch }}"
         fi
 
         echo "params=$PARAMS" >> "$GITHUB_OUTPUT"
-        echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
+
+    - name: Determine changes
+      if: steps.params.outputs.params != '--all'
+      id: changes
+      run: |
+        CHANGES=$(ct list-changed ${{ steps.params.outputs.params }})
+        if [ -z "$CHANGES" ]; then
+          echo "changed=false" >> "$GITHUB_OUTPUT"
+        fi
 
     - name: Set up Helm
-      if: steps.changes.outputs.changed == 'true'
+      if: steps.changes.outputs.changed != 'false'
       uses: azure/setup-helm@v3
       with:
         version: v3.12.1
 
     - name: Lint changed charts
-      if: steps.changes.outputs.changed == 'true'
+      if: steps.changes.outputs.changed != 'false'
       run: |
-        ct lint ${{steps.changes.outputs.params }}
+        ct lint ${{steps.params.outputs.params }}
 
     - name: Create kind cluster
-      if: steps.changes.outputs.changed
+      if: steps.changes.outputs.changed != 'false'
       uses: helm/kind-action@v1.7.0
 
     - name: Install charts
-      if: steps.changes.outputs.changed == 'true'
+      if: steps.changes.outputs.changed != 'false'
       run: |
-        ct install ${{steps.changes.outputs.params }}
+        ct install ${{steps.params.outputs.params }}
 
