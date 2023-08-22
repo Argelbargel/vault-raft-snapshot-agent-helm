@@ -16,6 +16,7 @@ on:
 
 env:
   CHARTS_DIR: ./charts
+  PUSH_TOKEN: ${{ secrets.PROTECTED_PUSH_TOKEN }}
 
 jobs:
   update-app-version:
@@ -26,11 +27,15 @@ jobs:
       contents: write
 
     steps:
+    - name: Ensure PUSH_TOKEN is set
+      if: env.PUSH_TOKEN == ''
+      run: echo "PUSH_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+
     - name: "Checkout repository"
       uses: actions/checkout@v3
       with:
         ref: master
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ env.PUSH_TOKEN }}
 
     - name: Configure Git
       run: |
