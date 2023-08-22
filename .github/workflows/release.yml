@@ -39,7 +39,7 @@ jobs:
         search_commit_body: true
 
   check-charts:
-    if: github.event.inputs.skip-checks != 'true'
+    if: github.event.inputs.skip-checks != 'true' && needs.determine-release-version.previous != "v0.0.0"
     needs:
     - determine-release-version
     uses: ./.github/workflows/checks.yml
@@ -47,7 +47,7 @@ jobs:
       target-branch: ${{ needs.determine-release-version.previous }}
 
   release-charts:
-    if: always() && !cancelled() && !failure() 
+    if: always() && !cancelled() && !failure() && needs.determine-release-version.previous != "v0.0.0"
     runs-on: ubuntu-latest
     needs:
     - determine-release-version
@@ -70,6 +70,8 @@ jobs:
 
     - name: Install Helm
       uses: azure/setup-helm@v3
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Run chart-releaser
       uses: helm/chart-releaser-action@v1.5.0

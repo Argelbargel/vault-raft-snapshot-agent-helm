@@ -7,33 +7,76 @@ on:
         description: "which appVersion to set in the charts?"
         type: string
         required: true
+      skip-push:
+        description: "should updates not be pushed to repo?"
+        type: boolean
+        default: false
   repository_dispatch:
     types: [update-vault-raft-snapshot-agent-images]
 
 env:
   CHARTS_DIR: ./charts
+  PUSH_TOKEN: ${{ secrets.PROTECTED_PUSH_TOKEN }}
 
 jobs:
   update-app-version:
-    if: (inputs.appVersion || github.event.client_payload.appVersion) != ""
+    if: (inputs.appVersion || github.event.client_payload.appVersion) != ''
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
     steps:
+    - name: Ensure PUSH_TOKEN is set
+      if: env.PUSH_TOKEN == ''
+      run: echo "PUSH_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+
     - name: "Checkout repository"
       uses: actions/checkout@v3
       with:
         ref: master
+        token: ${{ env.PUSH_TOKEN }}
+
+    - name: Configure Git
+      run: |
+        git config user.name "$GITHUB_ACTOR"
+        git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
     - name: Download semver shell utility
       run: |
         wget -O /tmp/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/master/src/semver
-        chmod +x /tmp/semver\n/tmp/semver --version
+        chmod +x /tmp/semver
+
+        /tmp/semver --version
 
     - name: Update charts
+      id: updates
       run: |
+        CHANGED=false
+        APP_VERSION=${{ inputs.appVersion || github.event.client_payload.appVersion }}
+        echo "New appVersion: $APP_VERSION"
         while IFS= read -r -d $'\0' chart; do
-          echo "Updating $chart..."
-          CURRENT_CHART_VERSION=$(sed -n 's/^version:\s*\([^\n]*\)/\1/p')
-          NEW_CHART_VERSION=$(/tmp/semver bump patch $CURRENT_CHART_VERSION)
-          sed -n 's/^(appVersion:\s*)[^\n]*/\1"${{ inputs.appVersion || github.event.client_payload.appVersion }}"/p'
-          sed -n 's/^(version:\s*)[^\n]*/\1"${NEW_CHART_VERSION}"/p'
-        done < <(find "${{ env.CHARTS_DIR }}" -type f --name Chart.yaml -print0)
+          CURRENT_APP_VERSION=$(sed -n 's/^appVersion:\s*"\([^"]*\)"/\1/p' $chart)
+          echo "chart $(basename $(dirname $chart)) has appVersion: $CURRENT_APP_VERSION"
+          if [ "$CURRENT_APP_VERSION" != "$APP_VERSION" ]; then
+            echo "Updating $chart..."
+            CURRENT_CHART_VERSION=$(sed -n 's/^version:\s*\([^\n]*\)/\1/p' $chart)
+            echo " - current chart version: $CURRENT_CHART_VERSION"
+            NEW_CHART_VERSION=$(/tmp/semver bump patch $CURRENT_CHART_VERSION)
+            echo " - new chart version: $NEW_CHART_VERSION"
+            sed -i "s/^\(appVersion:\s*\)[^\n]*/\1\"$APP_VERSION\"/" $chart
+            sed -i "s/^\(version:\s*\)[^\n]*/\1$NEW_CHART_VERSION/" $chart
+            echo "- resulting chart:"
+            cat $chart
+            CHANGED=true
+          fi
+        done < <(find "${{ env.CHARTS_DIR }}" -type f -name Chart.yaml -print0)
+        echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
+
+    - name: Commit changes
+      if: steps.updates.outputs.changed == 'true'
+      run: git commit -v -am "Updated appVersion to ${{ inputs.appVersion || github.event.client_payload.appVersion }}"
+
+    - name: Push changes
+      if: steps.updates.outputs.changed == 'true' && inputs.skip-push != true
+      run: git push
