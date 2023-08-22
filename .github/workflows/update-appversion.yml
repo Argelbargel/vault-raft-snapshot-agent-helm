@@ -7,6 +7,10 @@ on:
         description: "which appVersion to set in the charts?"
         type: string
         required: true
+      push:
+        description: "should updates to charts be pushed?"
+        type: boolean
+        required: true
   repository_dispatch:
     types: [update-vault-raft-snapshot-agent-images]
 
@@ -23,6 +27,11 @@ jobs:
       with:
         ref: master
 
+    - name: Configure Git
+      run: |
+        git config user.name "$GITHUB_ACTOR"
+        git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
     - name: Download semver shell utility
       run: |
         wget -O /tmp/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/master/src/semver
@@ -31,7 +40,9 @@ jobs:
         /tmp/semver --version
 
     - name: Update charts
+      id: updates
       run: |
+        CHANGED=false
         APP_VERSION=${{ inputs.appVersion || github.event.client_payload.appVersion }}
         echo "New appVersion: $APP_VERSION"
         while IFS= read -r -d $'\0' chart; do
@@ -46,5 +57,15 @@ jobs:
             sed -i "s/^\(version:\s*\)[^\n]*/\1$NEW_CHART_VERSION/" $chart
             echo "- resulting chart:"
             cat $chart
+            CHANGED=true
           #fi
         done < <(find "${{ env.CHARTS_DIR }}" -type f -name Chart.yaml -print0)
+        echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
+
+    - name: Commit changes
+      if: steps.updates.outputs.changed
+      run: git commit -am "Updated appVersion to ${{ inputs.appVersion || github.event.client_payload.appVersion }}"
+
+    - name: Push changes
+      if: steps.updates.outputs.changed && (inputs.push == '' || inputs.push == true)
+      run: git push
