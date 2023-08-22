@@ -20,6 +20,19 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v1
 
+    - name: Set up Helm
+      uses: azure/setup-helm@v3
+      with:
+        version: v3.12.1
+
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        check-latest: true
+
+    - name: Set-up chart testing
+      uses: helm/chart-testing-action@v2.4.0
+
     - name: Determine latest (Pre-)Release
       uses: cardinalby/git-get-release-action@v1
       id: latest-release
@@ -42,12 +55,29 @@ jobs:
           ${{ toJson( steps.latest-release.outputs )}}
         EOF
 
-    - name: Determine base revision for checks
-      id: target
+    - name: Determine changes
+      id: changes
       run: |
-        if [ "${{ steps.latest-release.outputs.target_commitish }}" == "" ]; then
-          echo "params=--all" >> "$GITHUB_OUTPUT""
-        fi
+        PARAMS=--all
+        CHANGED=true
+        if [ "${{ github.event_name}}" == "pull_request" ] || [ "${{ steps.latest-release.outputs.target_commitish }}" != "" ]; then
+          if [ "${{ github.event_name}}" == "pull_request" ]; then
+            PARAMS=--target-branch=${{ github.event.repository.default_branch }}
+          else
+            PARAMS=--target-branch=${{ github.event.repository.default_branch }}
+          fi
 
+          CHANGES=$(ct list-changed --target-branch ${{ steps.determine-target.outputs.target }})
+          if [[ -z "$changes" ]]; then
+            $CHANGED=false
+          fi
+        fi
+        echo "params=$PARAMS" >> "$GITHUB_OUTPUT"
+        echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
+
+    - name: Lint changed charts
+      if: steps.changes.outputs.changed
+      run: |
+        ct lint ${{steps.changes.outputs.params }}
 
 
