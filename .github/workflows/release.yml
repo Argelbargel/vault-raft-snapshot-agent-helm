@@ -14,27 +14,29 @@ env:
   CHARTS_DIR: ./charts
 
 jobs:
-  check-charts:
-    uses: ./.github/workflows/check-helm-charts.yml
-
-  release-charts:
+  determine-previous-release:
     runs-on: ubuntu-latest
+    outputs:
+      tag_name: ${{ steps.latest-release.outputs.tag_name }}
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v1
-
-    - name: Configure Git
-      run: |
-        git config user.name "$GITHUB_ACTOR"
-        git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-
-    - name: Install Helm
-      uses: azure/setup-helm@v3
-
-    - name: Run chart-releaser
-      uses: helm/chart-releaser-action@v1.5.0
-      with:
-        charts_dir: ${{ env.CHARTS_DIR }}
+    - name: Determine latest (Pre-)Release
+      if: startsWith(github.ref, 'refs/tags/v')
+      id: latest-release
+      uses: cardinalby/git-get-release-action@v1
       env:
-        CR_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        latest: true
+        draft: false
+        prerelease: true
+        doNotFailIfNotFound: true
+
+
+  check-charts:
+    needs:
+    - determine-previous-release
+    uses: ./.github/workflows/checks.yml
+    with:
+      target-branch: ${{ needs.determine-previous-release.outputs.tag_name }}
+

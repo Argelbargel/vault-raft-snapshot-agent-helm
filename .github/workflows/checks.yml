@@ -2,6 +2,16 @@ name: Lint and Test Helm-Charts
 
 on:
   workflow_dispatch:
+    inputs:
+      target-branch:
+        description: "check charts changed based on branch/tag"
+        type: string
+        required: false
+  workflow_call:
+    inputs:
+      target-branch:
+        type: string
+        required: false
   push:
     branches:
     - "**"
@@ -33,19 +43,8 @@ jobs:
     - name: Set-up chart testing
       uses: helm/chart-testing-action@v2.4.0
 
-    - name: Determine latest (Pre-)Release
-      if: startsWith(github.ref, 'refs/tags/v')
-      id: latest-release
-      uses: cardinalby/git-get-release-action@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        latest: true
-        draft: false
-        prerelease: true
-        doNotFailIfNotFound: true
-
     - name: Dump context
+
       run: |
         echo "github"
         cat <<EOF
@@ -61,18 +60,20 @@ jobs:
       run: |
         PARAMS=--all
         CHANGED=true
-        if [ "${{ github.event_name}}" == "pull_request" ] || [ "${{ steps.latest-release.outputs.tag_name }}" != "" ]; then
-          if [ "${{ github.event_name}}" == "pull_request" ]; then
-            PARAMS=--target-branch=${{ github.event.repository.default_branch }}
-          else
-            PARAMS=--target-branch=tag_name
-          fi
 
+        if [ "${{ inputs.target-branch }}" != "" ]; then
+          PARAMS=--target-branch=${{ inputs.target-branch }}
+        elif [ "${{ github.event_name}}" == "pull_request" ]; then
+          PARAMS=--target-branch=${{ github.event.repository.default_branch }}
+        fi
+
+        if [ "$PARAMS" != "--all" ]; then
           CHANGES=$(ct list-changed $PARAMS)
           if [[ -z "$changes" ]]; then
-            $CHANGED=false
+            CHANGED=false
           fi
         fi
+
         echo "params=$PARAMS" >> "$GITHUB_OUTPUT"
         echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
 
