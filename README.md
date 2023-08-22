@@ -1,7 +1,16 @@
-![Build](https://github.com/Argelbargel/vault-raft-snapshot-agent-helm/workflows/Build/badge.svg?branch=master)
-![Release](https://img.shields.io/github/v/release/Argelbargel/vault-raft-snapshot-agent-helm)
+# Vault Raft Snapshot Agent Helm-Charts
 
+Helm-Charts for easy deployment of [Vault Raft Snapshot Agent](https://github.com/Argelbargel/vault-raft-snapshot-agent) alongside [Vault](https://github.com/hashicorp/vault-helm) in your kubernetes cluster.
 
-# Vault Raft Snapshot Agent Helm-Chart
+## Charts
 
-This Helm-Chart is meant to be deployed  alongside vault in your cluster. Is uses [Vault Raft Snapshot Agent](https://github.com/Argelbargel/vault-raft-snapshot-agent)to take periodic snapshots of the Raft database and write it to the desired location.  
+## [Vault Raft Snapshot Agent](./charts/vault-raft-snapshot-agent/) 
+# Installs Vault Raft Snapshot Agent standalone. To install the chart:
+
+```
+helm repo add vault-raft-snapshot-agent https://argelbargel.github.io/vault-raft-snapshot-agent-helm/
+helm install vault-raft-snapshot-agent/vault-raft-snapshot-agent
+```
+
+See [documentation](./charts/vault-raft-snapshot-agent/) for configuration-details
+
