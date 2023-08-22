@@ -34,5 +34,7 @@ jobs:
     - name: Dump context
       run: |
         echo "${{ toJson(github) }}"
-        echo "${{ toJson( steps.latest-release.outputs )}}"
+        cat << EOF
+          ${{ toJson( steps.latest-release.outputs )}}
+        EOF
 
