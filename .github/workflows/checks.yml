@@ -61,12 +61,6 @@ jobs:
       with:
         version: v3.12.1
 
-    - uses: actions/setup-python@v4
-      if: steps.changes.outputs.changed
-      with:
-        python-version: '3.9'
-        check-latest: true
-
     - name: Lint changed charts
       if: steps.changes.outputs.changed
       run: |
