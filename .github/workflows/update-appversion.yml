@@ -1,0 +1,11 @@
+name: Update Charts appVersion
+
+on:
+  repository_dispatch:
+    types: [update-vault-raft-snapshot-agent-images]
+
+jobs:
+  myEvent:
+    runs-on: ubuntu-latest
+    steps:
+    - run: echo ${{ github.event.client_payload.appVersion }}
