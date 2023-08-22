@@ -17,11 +17,18 @@ on:
     - "**"
     tags-ignore:
     - "v**"
+    paths:
+    - "charts/**"
+    - ".github/workflows/checks.yml"
   pull_request:
     branches:
     - "**"
     tags-ignore:
     - "v**"
+    paths:
+    - "charts/**"
+    - ".github/workflows/checks.yml"
+
 
 jobs:
   check-charts:
@@ -30,30 +37,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v1
 
-    - name: Set up Helm
-      uses: azure/setup-helm@v3
-      with:
-        version: v3.12.1
-
-    - uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
-        check-latest: true
-
     - name: Set-up chart testing
       uses: helm/chart-testing-action@v2.4.0
-
-    - name: Dump context
-
-      run: |
-        echo "github"
-        cat <<EOF
-         ${{ toJson(github) }}
-        EOF
-        echo "latest-release:"
-        cat << EOF
-          ${{ toJson( steps.latest-release.outputs )}}
-        EOF
 
     - name: Determine changes
       id: changes
@@ -69,13 +54,19 @@ jobs:
 
         if [ "$PARAMS" != "--all" ]; then
           CHANGES=$(ct list-changed $PARAMS)
-          if [[ -z "$changes" ]]; then
+          if [[ -z "$CHANGES" ]]; then
             CHANGED=false
           fi
         fi
 
         echo "params=$PARAMS" >> "$GITHUB_OUTPUT"
         echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
+
+    - name: Set up Helm
+      if: steps.changes.outputs.changed
+      uses: azure/setup-helm@v3
+      with:
+        version: v3.12.1
 
     - name: Lint changed charts
       if: steps.changes.outputs.changed

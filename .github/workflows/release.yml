@@ -8,7 +8,7 @@ on:
     tags-ignore:
     - "**-v**"
     paths:
-    - '**/Chart.yaml'
+    - 'charts/**/Chart.yaml'
 
 env:
   CHARTS_DIR: ./charts
@@ -21,7 +21,6 @@ jobs:
 
     steps:
     - name: Determine latest (Pre-)Release
-      if: startsWith(github.ref, 'refs/tags/v')
       id: latest-release
       uses: cardinalby/git-get-release-action@v1
       env:
