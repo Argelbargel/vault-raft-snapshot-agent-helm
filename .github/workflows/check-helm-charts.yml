@@ -39,16 +39,13 @@ jobs:
         EOF
         echo "latest-release:"
         cat << EOF
-          steps.latest-release.outputs        
-        EOF
-        cat << EOF
           ${{ toJson( steps.latest-release.outputs )}}
         EOF
 
-    - name: Determine check-target
-      id: check-target
+    - name: Determine base revision for checks
+      id: target
       run: |
-        if [ "${{ steps.latest-release.outputs}}" == "" ]; then
+        if [ "${{ steps.latest-release.outputs.target_commitish }}" == "" ]; then
           echo "params=--all" >> "$GITHUB_OUTPUT""
         fi
 
