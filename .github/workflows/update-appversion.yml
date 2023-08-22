@@ -32,10 +32,14 @@ jobs:
 
     - name: Update charts
       run: |
+        APP_VERSION=${{ inputs.appVersion || github.event.client_payload.appVersion }}
+        echo "New appVersion: $APP_VERSION"
         while IFS= read -r -d $'\0' chart; do
           echo "Updating $chart..."
           CURRENT_CHART_VERSION=$(sed -n 's/^version:\s*\([^\n]*\)/\1/p')
+          echo " - current version: $CURRENT_CHART_VERSION"
           NEW_CHART_VERSION=$(/tmp/semver bump patch $CURRENT_CHART_VERSION)
-          sed -n 's/^(appVersion:\s*)[^\n]*/\1"${{ inputs.appVersion || github.event.client_payload.appVersion }}"/p'
+          echo " - new version: $NEW_CHART_VERSION"
+          sed -n 's/^(appVersion:\s*)[^\n]*/\1"${APP_VERSION}"/p'
           sed -n 's/^(version:\s*)[^\n]*/\1"${NEW_CHART_VERSION}"/p'
         done < <(find "${{ env.CHARTS_DIR }}" -type f -name Chart.yaml -print0)
