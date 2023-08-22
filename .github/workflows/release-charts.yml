@@ -21,6 +21,7 @@ concurrency:
 
 env:
   CHARTS_DIR: ./charts
+  HELM_DOCS_VERSION: 1.11.0
 
 jobs:
   determine-release-version:
@@ -73,6 +74,16 @@ jobs:
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Install helm-docs
+      run: |
+        curl --silent --show-error --fail --location --output /tmp/helm-docs.tar.gz \
+             https://github.com/norwoodj/helm-docs/releases/download/v"${HELM_DOCS_VERSION}"/helm-docs_"${HELM_DOCS_VERSION}"_Linux_x86_64.tar.gz
+        tar -xf /tmp/helm-docs.tar.gz helm-docs      
+
+    - name: Create README for charts
+      run: |
+        ./helm-docs
+
     - name: Run chart-releaser
       uses: helm/chart-releaser-action@v1.5.0
       with:
@@ -80,4 +91,3 @@ jobs:
       env:
         CR_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
         CR_RELEASE_NAME_TEMPLATE: ${{ needs.determine-release-version.outputs.current }}
-

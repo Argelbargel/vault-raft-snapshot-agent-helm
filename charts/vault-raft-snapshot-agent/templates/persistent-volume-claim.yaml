@@ -22,6 +22,9 @@ spec:
   {{- end }}
   accessModes:
     - {{ $pvc.accessMode | default "ReadWriteMany" }}
+  {{- with $pvc.volumeMode }}
+  volumeMode: {{ $pvc.volumeMode }}
+  {{- }}
   resources:
     {{- if not (empty $pvc.resources) }}
     {{- toYaml $pvc.resources | nindent 4 }}
@@ -29,4 +32,8 @@ spec:
     requests:
       storage: "1Gi"
     {{- end }}
+  {{- with $pvc.selector }}
+  selector: 
+    {{- toYaml $pvc.selector | nindent 4 }}
+  {{- }}
 {{- end }}    

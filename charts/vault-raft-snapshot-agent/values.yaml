@@ -1,14 +1,26 @@
 deployment:
   strategy:
-    type: "RollingUpdate"
+    # -- Update-strategy for the agent's pods
+    #    `Recreate` guarantees that no two snapshots get taken at the same time
+    #    `RollingUpdate` ensures that there's always one instance of the agent running
+    type: "Recreate"
   image:
+    # -- image that is deployed (change e.q. for private registry-proxy)
     repo: ghcr.io/argelbargel/vault-raft-snapshot-agent
-    # if empty defaults to .Chart.AppVersion
-    tag: ""
+    # -- (string) the image's tag
+    # @default -- `.Chart.AppVersion`
+    tag: 
+    # -- new releases of vault-raft-snapshot-agent always change the 
+    #    `.Chart.AppVersion` of this chart thus must only be changed 
+    #    if you use another repository than above
     pullPolicy: IfNotPresent
-  # use the default value for Kubernetes
-  revisionHistoryLimit: 0
+  # -- (int) see [kubernetes docs](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy)
+  #    You might want to change this to a small value to avoid cluttering up the 
+  #    UI of a Continuous Delivery Tool like Argo-CD
+  revisionHistoryLimit:
 
+# -- defines the contents of the configuration-file for vault-raft-snapshot-agent
+#    excpet for `local_storage` the keys and values are the same as [documented here](https://github.com/Argelbargel/vault-raft-snapshot-agent)
 config:
   addr: http://127.0.0.1:8200
   vault_auth_method: k8s
@@ -17,7 +29,15 @@ config:
   frequency: 1h
   retain: 72
   local_storage:
+    # -- enables/disables the local storage of snaphots
+    #    if disabled the corresponding volume and volume-mounts will not be created
     enabled: true
+    # @ignored 
     path: /vault/snapshots
+    # -- defines the kind of volume used to store the snapshots locally
+    #    If you specify `persistentVolumeClaim` the chart can generate the
+    #    PVC for you. Just specify the claim as you would [normally do](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#claims-as-volumes)
+    #    and add the property `create: true` and the relevant properties of your [PersistentVolumeClaimSpec]() 
+    #    as key of `persistentVolumeClaim`.
     volume:
       emptyDir: {}
