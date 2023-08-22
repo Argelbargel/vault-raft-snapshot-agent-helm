@@ -2,6 +2,11 @@ name: Release
 
 on:
   workflow_dispatch:
+    inputs:
+      skip-checks:
+        description: "Skip checks before releasing?"
+        type: boolean
+        default: false
   push:
     branches:
     - master
@@ -18,15 +23,24 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       tag_name: ${{ steps.latest-release.outputs.tag_name }}
+
     steps:
     - name: Determine Release-Version
+      id: release-version
       uses: paulhatch/semantic-version@v5.1.0
       with:
         tag_prefix: "v"
         version_format: "${major}.${minor}.${patch}"
         search_commit_body: true
 
+    - name: Dump release-version-infos
+      run: |
+        cat << EOF
+          {{ toJson(steps.release-version.outputs )}}
+        EOF
+
   check-charts:
+    if: inputs.skip-checks
     needs:
     - determine-release-version
     uses: ./.github/workflows/checks.yml
