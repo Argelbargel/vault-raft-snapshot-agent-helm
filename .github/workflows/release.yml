@@ -19,9 +19,6 @@ concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  CHARTS_DIR: ./charts
-
 jobs:
   determine-release-version:
     runs-on: ubuntu-latest
@@ -45,7 +42,7 @@ jobs:
         EOF
 
   check-charts:
-    if: "! ${{ inputs.skip-checks }}"
+    if: github.event.inputs.skip-checks != true
     needs:
     - determine-release-version
     uses: ./.github/workflows/checks.yml
