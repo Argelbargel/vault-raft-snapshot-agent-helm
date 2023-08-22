@@ -14,37 +14,37 @@ env:
   CHARTS_DIR: ./charts
 
 jobs:
-  determine-previous-release:
+  determine-release-version:
     runs-on: ubuntu-latest
     outputs:
       tag_name: ${{ steps.latest-release.outputs.tag_name }}
-
     steps:
-    - name: Determine latest (Pre-)Release
-      id: latest-release
-      uses: cardinalby/git-get-release-action@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Determine Release-Version
+      uses: paulhatch/semantic-version@v5.1.0
       with:
-        latest: true
-        draft: false
-        prerelease: true
-        doNotFailIfNotFound: true
-
+        tag_prefix: "v"
+        version_format: "${major}.${minor}.${patch}"
+        search_commit_body: true
 
   check-charts:
     needs:
-    - determine-previous-release
+    - determine-release-version
     uses: ./.github/workflows/checks.yml
     with:
-      target-branch: ${{ needs.determine-previous-release.outputs.tag_name }}
+      target-branch: v${{ needs.determine-release-version.outputs.previous_version }}
 
   release-charts:
     runs-on: ubuntu-latest
     needs:
-      - check-charts
+    - determine-release-version
+    - check-charts
 
     steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+      with:
+        fetch-depth: 0
+
     - name: Configure Git
       run: |
         git config user.name "$GITHUB_ACTOR"
@@ -59,3 +59,4 @@ jobs:
         charts_dir: ${{ env.CHARTS_DIR }}
       env:
         CR_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+        CR_RELEASE_NAME_TEMPLATE: v${{ needs.determine-release-version.outputs.version_tag }}
