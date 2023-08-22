@@ -17,11 +17,18 @@ on:
     - "**"
     tags-ignore:
     - "v**"
+    paths:
+    - "charts/**"
+    - ".github/workflows/checks.yml"
   pull_request:
     branches:
     - "**"
     tags-ignore:
     - "v**"
+    paths:
+    - "charts/**"
+    - ".github/workflows/checks.yml"
+
 
 jobs:
   check-charts:
