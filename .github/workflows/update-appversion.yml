@@ -36,4 +36,4 @@ jobs:
           NEW_CHART_VERSION=$(/tmp/semver bump patch $CURRENT_CHART_VERSION)
           sed -n 's/^(appVersion:\s*)[^\n]*/\1"${{ inputs.appVersion || github.event.client_payload.appVersion }}"/p'
           sed -n 's/^(version:\s*)[^\n]*/\1"${NEW_CHART_VERSION}"/p'
-        done < <(find "${{ env.CHARTS_DIR }}" -type f --name Chart.yaml -print0)
+        done < <(find "${{ env.CHARTS_DIR }}" -type f -name Chart.yaml -print0)
