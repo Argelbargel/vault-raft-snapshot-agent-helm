@@ -13,5 +13,5 @@ helm repo add vault-raft-snapshot-agent https://argelbargel.github.io/vault-raft
 helm install vault-raft-snapshot-agent/vault-raft-snapshot-agent
 ```
 
-See [documentation](./charts/vault-raft-snapshot-agent/) for configuration-details
+See [chart-details](./charts/vault-raft-snapshot-agent/) for configuration.
 

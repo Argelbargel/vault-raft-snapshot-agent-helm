@@ -23,6 +23,7 @@ deployment:
 #    Except for `local_storage` the keys and values are the same as in the agents
 #    [configuration file](https://github.com/Argelbargel/vault-raft-snapshot-agent)
 config:
+  # -- Url to the vault-API on the *leader* of your vault-cluster, e.g. `https?://vault-active.<vault-namespace>.svc.cluster.local:<vault-server service-port>`
   addr: http://127.0.0.1:8200
   vault_auth_method: k8s
   k8s_auth_path: kubernetes
