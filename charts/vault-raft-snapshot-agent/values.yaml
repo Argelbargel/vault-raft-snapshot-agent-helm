@@ -5,12 +5,12 @@ deployment:
     #    `RollingUpdate` ensures that there's always one instance of the agent running
     type: "Recreate"
   image:
-    # -- image that is deployed (change e.q. for private registry-proxy)
+    # -- Image that is deployed (change e.q. for private registry-proxy)
     repo: ghcr.io/argelbargel/vault-raft-snapshot-agent
     # -- (string) the image's tag
     # @default -- `.Chart.AppVersion`
     tag:
-    # -- new releases of vault-raft-snapshot-agent always change the
+    # -- New releases of vault-raft-snapshot-agent always change the
     #    `.Chart.AppVersion` of this chart thus must only be changed
     #    if you use another repository than above
     pullPolicy: IfNotPresent
@@ -19,8 +19,8 @@ deployment:
   #    UI of a Continuous Delivery Tool like Argo-CD
   revisionHistoryLimit:
 
-# -- defines the contents of the configuration-file for vault-raft-snapshot-agent
-#    except for `local_storage` the keys and values are the same as in the agents
+# -- Defines the contents of the configuration-file for vault-raft-snapshot-agent.
+#    Except for `local_storage` the keys and values are the same as in the agents
 #    [configuration file](https://github.com/Argelbargel/vault-raft-snapshot-agent)
 config:
   addr: http://127.0.0.1:8200
@@ -30,12 +30,12 @@ config:
   frequency: 1h
   retain: 72
   local_storage:
-    # -- enables/disables the local storage of snaphots
-    #    if disabled the corresponding volume and volume-mounts will not be created
+    # -- Enables/disables the local storage of snaphots.
+    #    If disabled the corresponding volume and volume-mounts will not be created
     enabled: true
     # @ignored
     path: /vault/snapshots
-    # -- defines the kind of volume used to store the snapshots locally
+    # -- Defines the kind of volume used to store the snapshots locally.
     #    If you specify `persistentVolumeClaim` the chart can generate the
     #    PVC for you. Just specify the claim as you would [normally do](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#claims-as-volumes)
     #    and add the property `create: true` and the relevant properties of your [PersistentVolumeClaimSpec]()
