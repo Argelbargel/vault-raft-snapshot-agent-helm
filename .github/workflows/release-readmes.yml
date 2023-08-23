@@ -70,5 +70,5 @@ jobs:
         cp -rf $TEMP_DIR/* .
         git config user.name $GITHUB_ACTOR
         git config user.email $GITHUB_ACTOR@users.noreply.github.com
-        git commit --signoff -am \"Sync READMEs for ${{github.ref_name}}
+        git commit --signoff -am "Sync READMEs for ${{github.ref_name}}""
         git push
