@@ -49,8 +49,8 @@ jobs:
         while IFS= read -r -d $'\0' readme; do
           CHART_NAME=$(basename $(dirname $readme))
           echo "Moving $readme for $CHART_NAME to $TEMP_DIR/$CHART_NAME..."
-          mkdir -p $TEMP_DIR/$CHART_NAME
-          mv $readme $TEMP_DIR/$CHART_NAME/
+          mkdir -p $TEMP_DIR/charts/$CHART_NAME
+          mv $readme $TEMP_DIR/charts/$CHART_NAME/
         done < <(find $CHARTS_DIR -type f -name README.md -print0)
 
 
