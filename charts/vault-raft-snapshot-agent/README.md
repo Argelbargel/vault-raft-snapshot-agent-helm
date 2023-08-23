@@ -36,7 +36,7 @@ vault-raft-snapshot-agent takes periodic snapshots of vault's raft database and 
 }
 </pre>
 </td>
-			<td>defines the contents of the configuration-file for vault-raft-snapshot-agent    except for `local_storage` the keys and values are the same as in the agents    [configuration file](https://github.com/Argelbargel/vault-raft-snapshot-agent)</td>
+			<td>Defines the contents of the configuration-file for vault-raft-snapshot-agent.    Except for `local_storage` the keys and values are the same as in the agents    [configuration file](https://github.com/Argelbargel/vault-raft-snapshot-agent)</td>
 		</tr>
 		<tr>
 			<td>config.local_storage.enabled</td>
@@ -45,7 +45,7 @@ vault-raft-snapshot-agent takes periodic snapshots of vault's raft database and 
 true
 </pre>
 </td>
-			<td>enables/disables the local storage of snaphots    if disabled the corresponding volume and volume-mounts will not be created</td>
+			<td>Enables/disables the local storage of snaphots.    If disabled the corresponding volume and volume-mounts will not be created</td>
 		</tr>
 		<tr>
 			<td>config.local_storage.volume</td>
@@ -56,7 +56,7 @@ true
 }
 </pre>
 </td>
-			<td>defines the kind of volume used to store the snapshots locally    If you specify `persistentVolumeClaim` the chart can generate the    PVC for you. Just specify the claim as you would [normally do](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#claims-as-volumes)    and add the property `create: true` and the relevant properties of your [PersistentVolumeClaimSpec]()    as key of `persistentVolumeClaim`.</td>
+			<td>Defines the kind of volume used to store the snapshots locally.    If you specify `persistentVolumeClaim` the chart can generate the    PVC for you. Just specify the claim as you would [normally do](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#claims-as-volumes)    and add the property `create: true` and the relevant properties of your [PersistentVolumeClaimSpec]()    as key of `persistentVolumeClaim`.</td>
 		</tr>
 		<tr>
 			<td>deployment.image.pullPolicy</td>
@@ -65,7 +65,7 @@ true
 "IfNotPresent"
 </pre>
 </td>
-			<td>new releases of vault-raft-snapshot-agent always change the    `.Chart.AppVersion` of this chart thus must only be changed    if you use another repository than above</td>
+			<td>New releases of vault-raft-snapshot-agent always change the    `.Chart.AppVersion` of this chart thus must only be changed    if you use another repository than above</td>
 		</tr>
 		<tr>
 			<td>deployment.image.repo</td>
@@ -74,7 +74,7 @@ true
 "ghcr.io/argelbargel/vault-raft-snapshot-agent"
 </pre>
 </td>
-			<td>image that is deployed (change e.q. for private registry-proxy)</td>
+			<td>Image that is deployed (change e.q. for private registry-proxy)</td>
 		</tr>
 		<tr>
 			<td>deployment.image.tag</td>
