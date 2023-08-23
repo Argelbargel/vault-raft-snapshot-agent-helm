@@ -2,6 +2,27 @@ apiVersion: v1
 entries:
   vault-raft-snapshot-agent:
   - apiVersion: v2
+    appVersion: v0.5.0
+    created: "2023-08-23T13:16:09.870349783Z"
+    description: vault-raft-snapshot-agent takes periodic snapshots of vault's raft
+      database and writes it to a local file or an S3 bucket
+    digest: 514c7c38d7e0ebfc7bb3658e125b186f0ff9081841511f8f7fc26c62a33d1c79
+    home: https://github.com/Argelbargel/vault-raft-snapshot-agent
+    keywords:
+    - vault-raft-snapshot-agent
+    - vault
+    - backup
+    - snapshots
+    - raft
+    - integrated storage
+    maintainers:
+    - name: Argelbargel
+    name: vault-raft-snapshot-agent
+    type: application
+    urls:
+    - https://github.com/Argelbargel/vault-raft-snapshot-agent-helm/releases/download/v0.1.2/vault-raft-snapshot-agent-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
     appVersion: v0.4.1
     created: "2023-08-22T23:07:16.019917865Z"
     description: vault-raft-snapshot-agent takes periodic snapshots of vault's raft
@@ -43,4 +64,4 @@ entries:
     urls:
     - https://github.com/Argelbargel/vault-raft-snapshot-agent-helm/releases/download/v0.1.0/vault-raft-snapshot-agent-0.1.0.tgz
     version: 0.1.0
-generated: "2023-08-22T23:07:16.019929566Z"
+generated: "2023-08-23T13:16:09.870378083Z"
