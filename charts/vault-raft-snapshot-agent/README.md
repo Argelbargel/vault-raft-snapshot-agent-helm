@@ -23,6 +23,9 @@ Vault Raft Snapshot Agent takes periodic snapshots of Vault's Raft database and 
 | deployment.image.tag | string | `.Chart.AppVersion` | the image's tag |
 | deployment.revisionHistoryLimit | int | `nil` | see [kubernetes docs](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy)    You might want to change this to a small value to avoid cluttering up the    UI of a Continuous Delivery Tool like Argo-CD |
 | deployment.strategy.type | string | `"Recreate"` | Update-strategy for the agent's pods    `Recreate` guarantees that no two snapshots get taken at the same time    `RollingUpdate` ensures that there's always one instance of the agent running |
+| fullnameOverride | string | release-name + chart-name truncated to 63 chars | overrides the generated full-name for generated resources |
+| global.namespace | string | `.Release.Namespace` | allows to override the release's namespace |
+| nameOverride | string | `.Chart.Name` | overrides the generated name for generated resources |
 
 ## License
 - Source code is licensed under MIT
