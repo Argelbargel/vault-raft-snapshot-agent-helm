@@ -20,4 +20,4 @@ See [chart-details](./charts/vault-raft-snapshot-agent/) for configuration.
 - Source code is licensed under MIT
 
 ## Contributors
-- Vault Raft Snapshot Agent was originally developed by @Lucretius
+- Vault Raft Snapshot Agent was originally developed by [@Lucretius](https://github.com/Lucretius)
