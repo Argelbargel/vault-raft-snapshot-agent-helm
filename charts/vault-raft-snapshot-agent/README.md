@@ -2,7 +2,7 @@
 
 ![Version: 0.1.4](https://img.shields.io/badge/Version-0.1.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.5.2](https://img.shields.io/badge/AppVersion-v0.5.2-informational?style=flat-square)
 
-Vault Raft Snapshot Agent takes periodic snapshots of Vault's Raft database and writes it to a local file or an S3 bucket
+Vault Raft Snapshot Agent takes periodic snapshots of vault's raft database and writes it to a local file or an S3 bucket
 
 **Homepage:** <https://github.com/Argelbargel/vault-raft-snapshot-agent>
 
@@ -23,12 +23,6 @@ Vault Raft Snapshot Agent takes periodic snapshots of Vault's Raft database and 
 | deployment.image.tag | string | `.Chart.AppVersion` | the image's tag |
 | deployment.revisionHistoryLimit | int | `nil` | see [kubernetes docs](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy)    You might want to change this to a small value to avoid cluttering up the    UI of a Continuous Delivery Tool like Argo-CD |
 | deployment.strategy.type | string | `"Recreate"` | Update-strategy for the agent's pods    `Recreate` guarantees that no two snapshots get taken at the same time    `RollingUpdate` ensures that there's always one instance of the agent running |
-| fullnameOverride | string | release-name + chart-name truncated to 63 chars | overrides the generated full-name for generated resources |
-| global.namespace | string | `.Release.Namespace` | allows to override the release's namespace |
-| nameOverride | string | `.Chart.Name` | overrides the generated name for generated resources |
-
-## License
-- Source code is licensed under MIT
 
 ## Contributors
-- Vault Raft Snapshot Agent was originally developed by [Lucretius on Github](https://github.com/Lucretius/vault_raft_snapshot_agent)
+- Vault Raft Snapshot Agent was originally developed by @Lucretius
