@@ -1,3 +1,8 @@
+global:
+  # -- allows to override the release's namespace
+  # @default -- `.Release.Namespace`
+  namespace:
+
 # -- overrides the generated full-name for generated resources 
 # @default -- release-name + chart-name truncated to 63 chars
 fullnameOverride:
