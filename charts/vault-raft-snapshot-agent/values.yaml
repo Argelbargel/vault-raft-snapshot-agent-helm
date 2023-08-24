@@ -1,3 +1,10 @@
+# -- overrides the generated full-name for generated resources 
+# @default -- release-name + chart-name truncated to 63 chars
+fullnameOverride:
+# -- overrides the generated name for generated resources
+# @default -- `.Chart.Name`
+nameOverride: 
+
 deployment:
   strategy:
     # -- Update-strategy for the agent's pods
