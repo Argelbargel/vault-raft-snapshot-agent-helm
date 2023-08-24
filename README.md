@@ -5,7 +5,7 @@ Helm-Charts for easy deployment of [Vault Raft Snapshot Agent](https://github.co
 
 ## Charts
 
-## [Vault Raft Snapshot Agent](./charts/vault-raft-snapshot-agent/) 
+### [Vault Raft Snapshot Agent](./charts/vault-raft-snapshot-agent/) 
 
 Installs Vault Raft Snapshot Agent standalone. To install the chart:
 
@@ -16,3 +16,8 @@ helm install vault-raft-snapshot-agent/vault-raft-snapshot-agent
 
 See [chart-details](./charts/vault-raft-snapshot-agent/) for configuration.
 
+## License
+- Source code is licensed under MIT
+
+## Contributors
+- Vault Raft Snapshot Agent was originally developed by @Lucretius
