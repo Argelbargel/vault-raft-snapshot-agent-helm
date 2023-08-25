@@ -12,11 +12,13 @@ on:
         type: boolean
         default: false
   repository_dispatch:
-    types: [update-vault-raft-snapshot-agent-images]
+    types: 
+      - update-vault-raft-snapshot-agent-images
 
 env:
   CHARTS_DIR: ./charts
   PUSH_TOKEN: ${{ secrets.PROTECTED_PUSH_TOKEN }}
+  SEMVER_TOOL_VERSION: 3.3.0
 
 jobs:
   update-app-version:
@@ -44,7 +46,7 @@ jobs:
 
     - name: Download semver shell utility
       run: |
-        wget -O /tmp/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/master/src/semver
+        wget -O /tmp/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/${{env.SEMVER_TOOL_VERSION}}/src/semver
         chmod +x /tmp/semver
 
         /tmp/semver --version
@@ -65,6 +67,7 @@ jobs:
             NEW_CHART_VERSION=$(/tmp/semver bump patch $CURRENT_CHART_VERSION)
             echo " - new chart version: $NEW_CHART_VERSION"
             sed -i "s/^\(appVersion:\s*\)[^\n]*/\1\"$APP_VERSION\"/" $chart
+            sed -i "s/\(ghcr.io\/argelbargel\/vault-raft-snapshot-agent:\)$CURRENT_APP_VERSION/\1$APP_VERSION/" $chart
             sed -i "s/^\(version:\s*\)[^\n]*/\1$NEW_CHART_VERSION/" $chart
             echo "- resulting chart:"
             cat $chart
