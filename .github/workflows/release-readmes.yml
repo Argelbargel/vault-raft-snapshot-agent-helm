@@ -3,6 +3,8 @@ name: Release READMEs
 on:
   workflow_dispatch:
   push:
+    branches:
+    - master
     tags:
     - "v**"
     paths:
