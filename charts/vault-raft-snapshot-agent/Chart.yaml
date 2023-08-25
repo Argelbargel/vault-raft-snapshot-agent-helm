@@ -28,5 +28,6 @@ annotations:
         - linux/arm/v7
   artifacthub.io/recommendations: |
     - url: https://artifacthub.io/packages/helm/hashicorp/vault
+  artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
     - improves documentation & metadata
