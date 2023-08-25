@@ -5,6 +5,12 @@
 
 {{ template "chart.description" . }}
 
+This Chart deploys an instance of [Vault Raft Snapshot Agent](https://github.com/Argelbargel/vault-raft-snapshot-agent) in your cluster
+and optionally creates a PersistentVolume to store the generated snapshots of Vault's Raft database in.
+
+Besides installing an configuring this chart you'll have to configure your Vault to grant the agent permission to take snapshots of the raft database. 
+See [vault-raft-snapshot-agent's documentation](https://github.com/Argelbargel/vault-raft-snapshot-agent#authentication) for instructions.
+
 {{ template "chart.homepageLine" . }}
 
 {{ template "chart.sourcesSection" . }}

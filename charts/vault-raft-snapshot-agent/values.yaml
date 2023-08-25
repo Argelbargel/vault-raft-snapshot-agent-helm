@@ -17,14 +17,14 @@ deployment:
     #    `RollingUpdate` ensures that there's always one instance of the agent running
     type: "Recreate"
   image:
-    # -- Image that is deployed (change e.q. for private registry-proxy)
+    # -- Image that is deployed (change e.g. for private registry-proxy)
     repo: ghcr.io/argelbargel/vault-raft-snapshot-agent
     # -- (string) the image's tag
     # @default -- `.Chart.AppVersion`
     tag:
     # -- New releases of vault-raft-snapshot-agent always change the
     #    `.Chart.AppVersion` of this chart thus must only be changed
-    #    if you use another repository than above
+    #    if you use another repository than the default
     pullPolicy: IfNotPresent
   # -- (int) see [kubernetes docs](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy)
   #    You might want to change this to a small value to avoid cluttering up the
@@ -32,7 +32,7 @@ deployment:
   revisionHistoryLimit:
 
 # -- Defines the contents of the configuration-file for vault-raft-snapshot-agent.
-#    Except for `local_storage` the keys and values are the same as in the agents
+#    Except for `local_storage` the keys and values are the same as in the agent's
 #    [configuration file](https://github.com/Argelbargel/vault-raft-snapshot-agent)
 config:
   # -- Url to the vault-API on the *leader* of your vault-cluster, e.g. `https?://vault-active.<vault-namespace>.svc.cluster.local:<vault-server service-port>`
