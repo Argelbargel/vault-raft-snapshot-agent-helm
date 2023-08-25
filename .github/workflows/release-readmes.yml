@@ -2,9 +2,8 @@ name: Release READMEs
 
 on:
   workflow_dispatch:
+  workflow_call:
   push:
-    branches:
-    - master
     tags:
     - "v**"
     paths:
