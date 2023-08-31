@@ -79,11 +79,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Install helm-docs
-      run: |
-        curl --silent --show-error --fail --location --output /tmp/helm-docs.tar.gz \
-             https://github.com/norwoodj/helm-docs/releases/download/v"${HELM_DOCS_VERSION}"/helm-docs_"${HELM_DOCS_VERSION}"_Linux_x86_64.tar.gz
-        tar -xf /tmp/helm-docs.tar.gz helm-docs      
-
+      run: "curl --silent --show-error --fail --location --output /tmp/helm-docs.tar.gz \\\n     https://github.com/norwoodj/helm-docs/releases/download/v\"${HELM_DOCS_VERSION}\"/helm-docs_\"${HELM_DOCS_VERSION}\"_Linux_x86_64.tar.gz\ntar -xf /tmp/helm-docs.tar.gz helm-docs      \n     #magic___^_^___line\n"
     - name: Replace templates with actual README for charts
       run: |
         ./helm-docs
@@ -97,6 +93,3 @@ jobs:
         CR_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
         CR_RELEASE_NAME_TEMPLATE: ${{ needs.determine-release-version.outputs.current }}
 
-  release-readmes:
-    uses: .github/workflows/release-readmes.yml
-    secrets: inherit
