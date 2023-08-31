@@ -16,7 +16,7 @@ on:
     - 'charts/**/Chart.yaml'
 
 concurrency:
-  group: release-${{ github.ref }}
+  group: release-charts-${{ github.ref }}
   cancel-in-progress: true
 
 env:
