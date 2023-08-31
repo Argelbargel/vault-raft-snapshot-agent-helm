@@ -97,6 +97,9 @@ jobs:
     uses: ./.github/workflows/release-readmes.yml
     secrets: inherit
 
+    needs:
+    - release-charts
+
     permissions:
       contents: read
       pages: write
