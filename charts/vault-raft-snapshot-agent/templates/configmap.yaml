@@ -10,11 +10,11 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     component: snapshot-agent
 data:
-  snapshot.json: |-
+  snapshot.yaml: |-
     {{- $config := deepCopy .Values.config -}}
-    {{- if $config.local_storage.enabled -}}
-    {{- $_ := set $config "local_storage" (pick $config.local_storage "path") -}}
+    {{- if $config.uploaders.local.enabled -}}
+    {{- $_ := set $config.uploaders "local" (pick $config.uploaders.local "path") -}}
     {{- else -}}
-    {{- $_ := unset $config "local_storage" -}}
+    {{- $_ := unset $config.uploaders "local" -}}
     {{- end -}}
-    {{- toJson $config | nindent 4 -}}
+    {{- toYaml $config | nindent 4 -}}

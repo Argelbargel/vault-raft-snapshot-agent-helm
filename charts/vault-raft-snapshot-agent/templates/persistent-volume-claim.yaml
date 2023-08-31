@@ -1,6 +1,6 @@
-{{- $localStorage := .Values.config.local_storage -}}
-{{- if and $localStorage.enabled (default false (dig "volume" "persistentVolumeClaim" dict $localStorage).create) -}}
-{{- $pvc := $localStorage.volume.persistentVolumeClaim -}}
+{{- $localUploader := .Values.config.uploaders.local -}}
+{{- if and $localUploader.enabled (default false (dig "volume" "persistentVolumeClaim" dict $localUploader).create) -}}
+{{- $pvc := $localUploader.volume.persistentVolumeClaim -}}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

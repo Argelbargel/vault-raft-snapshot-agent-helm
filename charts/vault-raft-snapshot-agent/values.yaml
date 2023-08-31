@@ -36,22 +36,25 @@ deployment:
 #    [configuration file](https://github.com/Argelbargel/vault-raft-snapshot-agent)
 config:
   # -- Url to the vault-API on the *leader* of your vault-cluster, e.g. `https?://vault-active.<vault-namespace>.svc.cluster.local:<vault-server service-port>`
-  addr: http://127.0.0.1:8200
-  vault_auth_method: k8s
-  k8s_auth_path: kubernetes
-  k8s_auth_role: vault-raft-snapshot-agent
-  frequency: 1h
-  retain: 72
-  local_storage:
-    # -- Enables/disables the local storage of snaphots.
-    #    If disabled the corresponding volume and volume-mounts will not be created
-    enabled: true
-    # @ignored
-    path: /vault/snapshots
-    # -- Defines the kind of volume used to store the snapshots locally.
-    #    If you specify `persistentVolumeClaim` the chart can generate the
-    #    PVC for you. Just specify the claim as you would [normally do](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#claims-as-volumes)
-    #    and add the property `create: true` and the relevant properties of your [PersistentVolumeClaimSpec]()
-    #    as key of `persistentVolumeClaim`.
-    volume:
-      emptyDir: {}
+  vault:
+    url: http://127.0.0.1:8200
+    auth:
+      kubernetes:
+        role: vault-raft-snapshot-agent
+  snapshots:
+    frequency: 1h
+    retain: 72
+  uploaders:
+    local:
+      # -- Enables/disables the local storage of snaphots.
+      #    If disabled the corresponding volume and volume-mounts will not be created
+      enabled: true
+      # @ignored
+      path: /vault/snapshots
+      # -- Defines the kind of volume used to store the snapshots locally.
+      #    If you specify `persistentVolumeClaim` the chart can generate the
+      #    PVC for you. Just specify the claim as you would [normally do](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#claims-as-volumes)
+      #    and add the property `create: true` and the relevant properties of your [PersistentVolumeClaimSpec]()
+      #    as key of `persistentVolumeClaim`.
+      volume:
+        emptyDir: {}
