@@ -5,6 +5,44 @@ entries:
       artifacthub.io/category: security
       artifacthub.io/changes: |
         - improves documentation & metadata
+      artifacthub.io/containsSecurityUpdates: "false"
+      artifacthub.io/images: |
+        - name: vault-raft-snapshot-agent
+          image: ghcr.io/argelbargel/vault-raft-snapshot-agent:v0.6.1
+          platforms:
+            - linux/amd64
+            - linux/arm64
+            - linux/arm/v7
+      artifacthub.io/license: MIT
+      artifacthub.io/recommendations: |
+        - url: https://artifacthub.io/packages/helm/hashicorp/vault
+    apiVersion: v2
+    appVersion: v0.6.1
+    created: "2023-08-31T18:09:30.862873165Z"
+    description: Vault Raft Snapshot Agent takes periodic snapshots of Vault's Raft
+      database and stores them on a local volume or an remote S3 bucket
+    digest: d85a56bbd6aa435f6a726fa75e49701c41cc2dd6916b61789d60df9370460c6e
+    home: https://argelbargel.github.io/vault-raft-snapshot-agent-helm/
+    keywords:
+    - vault-raft-snapshot-agent
+    - vault
+    - backup
+    - snapshots
+    - raft
+    - integrated storage
+    maintainers:
+    - name: Argelbargel
+    name: vault-raft-snapshot-agent
+    sources:
+    - https://github.com/Argelbargel/vault-raft-snapshot-agent-helm/
+    type: application
+    urls:
+    - https://github.com/Argelbargel/vault-raft-snapshot-agent-helm/releases/download/v0.2.0/vault-raft-snapshot-agent-0.2.1.tgz
+    version: 0.2.1
+  - annotations:
+      artifacthub.io/category: security
+      artifacthub.io/changes: |
+        - improves documentation & metadata
       artifacthub.io/images: |
         - name: vault-raft-snapshot-agent
           image: ghcr.io/argelbargel/vault-raft-snapshot-agent:v0.5.2
@@ -82,4 +120,4 @@ entries:
     urls:
     - https://github.com/Argelbargel/vault-raft-snapshot-agent-helm/releases/download/v0.1.4/vault-raft-snapshot-agent-0.1.4.tgz
     version: 0.1.4
-generated: "2023-08-25T09:57:13.10801338Z"
+generated: "2023-08-31T18:09:30.862889066Z"
