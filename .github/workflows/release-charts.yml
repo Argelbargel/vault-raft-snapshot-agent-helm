@@ -98,5 +98,5 @@ jobs:
         CR_RELEASE_NAME_TEMPLATE: ${{ needs.determine-release-version.outputs.current }}
 
   release-readmes:
-    uses: '.github/workflows/release-readmes.yml'
+    uses: .github/workflows/release-readmes.yml
     secrets: inherit
