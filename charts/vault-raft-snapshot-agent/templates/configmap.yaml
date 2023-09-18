@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     component: snapshot-agent
 data:
-  snapshot.yaml: |-
+  snapshots.yaml: |-
     {{- $config := deepCopy .Values.config -}}
     {{- if $config.uploaders.local.enabled -}}
     {{- $_ := set $config.uploaders "local" (pick $config.uploaders.local "path") -}}
