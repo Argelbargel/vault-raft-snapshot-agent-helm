@@ -31,6 +31,9 @@ spec:
         component: snapshot-agent
       annotations:
         checksum/config: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- if .Values.deployment.extraAnnotations }}
+        {{ toYaml .Values.deployment.extraAnnotations | indent 8 }}
+        {{- end }}
     spec:
       restartPolicy: Always
       containers:
@@ -39,6 +42,12 @@ spec:
           image: {{ .repo }}:{{ .tag | default $.Chart.AppVersion }}
           imagePullPolicy: {{ .pullPolicy }}
           {{- end }}
+          {{- if not (empty .Values.deployment.extraEnv) }}
+          env: {{ toYaml .Values.deployment.extraEnv | nindent 12 }}
+          {{- end }}
+          {{- if not (empty .Values.deployment.extraEnvFrom) }}
+          envFrom: {{ toYaml .Values.deployment.extraEnvFrom | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - mountPath: /etc/vault.d/
               name: config
@@ -46,10 +55,17 @@ spec:
             - mountPath: {{ .Values.config.uploaders.local.path }}
               name: snapshots
             {{- end }}
+            {{- range $volume := .Values.deployment.extraVolumes }}
+            - mountPath: {{ required "volume mountPath is required" $volume.mountPath }}
+              name: {{ required "volume name is required" $volume.name }}
+              {{- with $volume.readOnly }}
+              readOnly: {{ $volume.readOnly }}
+              {{- end }}
+            {{- end }}
       volumes:
-        - configMap:
+        - name: config
+          configMap:
             name: {{ include "vault-raft-snapshot-agent.fullname" . }}
-          name: config
         {{- if .Values.config.uploaders.local.enabled }}
         - name: snapshots
           {{- with .Values.config.uploaders.local.volume }}
@@ -60,4 +76,8 @@ spec:
           {{- toYaml . | nindent 10 -}}
           {{- end }}
           {{- end }}
+        {{- end }}
+        {{- range $volume := .Values.deployment.extraVolumes }}
+        - name: {{ required "volume name is required" (get $volume "name") }}
+          {{- toYaml (omit $volume "name" "mountPath" "readOnly") | nindent 10 }}
         {{- end }}

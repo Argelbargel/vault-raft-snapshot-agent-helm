@@ -11,6 +11,17 @@ fullnameOverride:
 nameOverride:
 
 deployment:
+  # -- additional annotation to add to the pod's metadata 
+  extraAnnotations: {}
+  # -- additional environment-variables to add to the pod
+  extraEnv: []
+  # -- additional environment-refs to add to the pod
+  extraEnvFrom: []
+  # -- additional volumes for the container. configures the pods `volumeMounts` and `volumes`-sections:
+  # <pre>- name: my-volume<br>  mountPath: /my-path<br>  emptyDir: {}</pre>
+  # `name` and `mountPath` are used both in `volumeMounts` and `volumes`, `readOnly` only applies to 
+  # `volumeMounts` and any other key is added to `volumes` only
+  extraVolumes: []
   strategy:
     # -- Update-strategy for the agent's pods
     #    `Recreate` guarantees that no two snapshots get taken at the same time
