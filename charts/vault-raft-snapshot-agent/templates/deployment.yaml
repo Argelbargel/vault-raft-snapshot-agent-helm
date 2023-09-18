@@ -51,6 +51,7 @@ spec:
           volumeMounts:
             - mountPath: /etc/vault.d/
               name: config
+              readOnly: true
             {{- if .Values.config.uploaders.local.enabled }}
             - mountPath: {{ .Values.config.uploaders.local.path }}
               name: snapshots
