@@ -55,17 +55,17 @@ config:
   snapshots:
     frequency: 1h
     retain: 72
-  uploaders:
-    local:
-      # -- Enables/disables the local storage of snaphots.
-      #    If disabled the corresponding volume and volume-mounts will not be created
-      enabled: true
-      # @ignored
-      path: /vault/snapshots
-      # -- Defines the kind of volume used to store the snapshots locally.
-      #    If you specify `persistentVolumeClaim` the chart can generate the
-      #    PVC for you. Just specify the claim as you would [normally do](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#claims-as-volumes)
-      #    and add the property `create: true` and the relevant properties of your [PersistentVolumeClaimSpec]()
-      #    as key of `persistentVolumeClaim`.
-      volume:
-        emptyDir: {}
+    storages:
+      local:
+        # -- Enables/disables the local storage of snaphots.
+        #    If disabled the corresponding volume and volume-mounts will not be created
+        enabled: true
+        # @ignored
+        path: /vault/snapshots
+        # -- Defines the kind of volume used to store the snapshots locally.
+        #    If you specify `persistentVolumeClaim` the chart can generate the
+        #    PVC for you. Just specify the claim as you would [normally do](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#claims-as-volumes)
+        #    and add the property `create: true` and the relevant properties of your [PersistentVolumeClaimSpec]()
+        #    as key of `persistentVolumeClaim`.
+        volume:
+          emptyDir: {}

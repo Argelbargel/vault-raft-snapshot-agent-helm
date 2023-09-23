@@ -12,9 +12,9 @@ metadata:
 data:
   snapshots.yaml: |-
     {{- $config := deepCopy .Values.config -}}
-    {{- if $config.uploaders.local.enabled -}}
-    {{- $_ := set $config.uploaders "local" (pick $config.uploaders.local "path") -}}
+    {{- if $config.snapshots.storages.local.enabled -}}
+    {{- $_ := set $config.snapshots.storages "local" (pick $config.snapshots.storages.local "path") -}}
     {{- else -}}
-    {{- $_ := unset $config.uploaders "local" -}}
+    {{- $_ := unset $config.snapshots.storages "local" -}}
     {{- end -}}
     {{- toYaml $config | nindent 4 -}}
