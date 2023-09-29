@@ -17,6 +17,44 @@ entries:
       artifacthub.io/recommendations: |
         - url: https://artifacthub.io/packages/helm/hashicorp/vault
     apiVersion: v2
+    appVersion: v0.10.0
+    created: "2023-09-29T21:18:17.286197812Z"
+    description: Vault Raft Snapshot Agent takes periodic snapshots of Vault's Raft
+      database and stores them on a local volume or an remote S3 bucket
+    digest: d1b18b415e07f445cbeaa50bff819f0603d8a04e63da15487c4a6cbb0912c554
+    home: https://argelbargel.github.io/vault-raft-snapshot-agent-helm/
+    keywords:
+    - vault-raft-snapshot-agent
+    - vault
+    - backup
+    - snapshots
+    - raft
+    - integrated storage
+    maintainers:
+    - name: Argelbargel
+    name: vault-raft-snapshot-agent
+    sources:
+    - https://github.com/Argelbargel/vault-raft-snapshot-agent-helm/
+    type: application
+    urls:
+    - https://github.com/Argelbargel/vault-raft-snapshot-agent-helm/releases/download/v0.2.8/vault-raft-snapshot-agent-0.4.3.tgz
+    version: 0.4.3
+  - annotations:
+      artifacthub.io/category: security
+      artifacthub.io/changes: |
+        - improves documentation & metadata
+      artifacthub.io/containsSecurityUpdates: "false"
+      artifacthub.io/images: |
+        - name: vault-raft-snapshot-agent
+          image: ghcr.io/argelbargel/vault-raft-snapshot-agent:v0.8.0
+          platforms:
+            - linux/amd64
+            - linux/arm64
+            - linux/arm/v7
+      artifacthub.io/license: MIT
+      artifacthub.io/recommendations: |
+        - url: https://artifacthub.io/packages/helm/hashicorp/vault
+    apiVersion: v2
     appVersion: v0.9.2
     created: "2023-09-29T11:25:12.198874649Z"
     description: Vault Raft Snapshot Agent takes periodic snapshots of Vault's Raft
@@ -386,4 +424,4 @@ entries:
     urls:
     - https://github.com/Argelbargel/vault-raft-snapshot-agent-helm/releases/download/v0.1.4/vault-raft-snapshot-agent-0.1.4.tgz
     version: 0.1.4
-generated: "2023-09-29T11:25:12.198905551Z"
+generated: "2023-09-29T21:18:17.286245813Z"
