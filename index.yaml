@@ -8,7 +8,7 @@ entries:
       artifacthub.io/containsSecurityUpdates: "false"
       artifacthub.io/images: |
         - name: vault-raft-snapshot-agent
-          image: ghcr.io/argelbargel/vault-raft-snapshot-agent:v0.8.0
+          image: ghcr.io/argelbargel/vault-raft-snapshot-agent:v0.10.4
           platforms:
             - linux/amd64
             - linux/arm64
