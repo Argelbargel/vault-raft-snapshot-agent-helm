@@ -69,6 +69,7 @@ jobs:
             sed -i "s/^\(appVersion:\s*\)[^\n]*/\1\"$APP_VERSION\"/" $chart
             sed -i "s/\(ghcr.io\/argelbargel\/vault-raft-snapshot-agent:\)$CURRENT_APP_VERSION/\1$APP_VERSION/" $chart
             sed -i "s/^\(version:\s*\)[^\n]*/\1$NEW_CHART_VERSION/" $chart
+            echo "  artifacthub.io/changes: |" >> $chart
             echo "    - update app-version to $APP_VERSION" >> $chart
             echo "- resulting chart:"
             cat $chart
