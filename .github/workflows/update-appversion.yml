@@ -12,8 +12,8 @@ on:
         type: boolean
         default: false
   repository_dispatch:
-    types: 
-      - update-vault-raft-snapshot-agent-images
+    types:
+    - update-vault-raft-snapshot-agent-images
 
 env:
   CHARTS_DIR: ./charts
@@ -34,7 +34,7 @@ jobs:
       run: echo "PUSH_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
 
     - name: "Checkout repository"
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         ref: master
         token: ${{ env.PUSH_TOKEN }}

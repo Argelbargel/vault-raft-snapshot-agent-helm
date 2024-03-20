@@ -32,12 +32,12 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
     - name: Determine Release-Version
       id: release-version
-      uses: paulhatch/semantic-version@v5.1.0
+      uses: paulhatch/semantic-version@v5.4.0
       with:
         tag_prefix: "v"
         version_format: "${major}.${minor}.${patch}"
@@ -64,7 +64,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
@@ -74,7 +74,7 @@ jobs:
         git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
     - name: Install Helm
-      uses: azure/setup-helm@v3
+      uses: azure/setup-helm@v4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
 
