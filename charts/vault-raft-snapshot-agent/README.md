@@ -1,6 +1,6 @@
 # vault-raft-snapshot-agent
 
-![Version: 0.4.9](https://img.shields.io/badge/Version-0.4.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.10.6](https://img.shields.io/badge/AppVersion-v0.10.6-informational?style=flat-square)
+![Version: 0.4.11](https://img.shields.io/badge/Version-0.4.11-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.10.9](https://img.shields.io/badge/AppVersion-v0.10.9-informational?style=flat-square)
 
 Vault Raft Snapshot Agent takes periodic snapshots of Vault's Raft database and stores them on a local volume or an remote S3 bucket
 
