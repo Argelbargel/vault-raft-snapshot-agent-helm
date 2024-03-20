@@ -29,6 +29,3 @@ annotations:
   artifacthub.io/recommendations: |
     - url: https://artifacthub.io/packages/helm/hashicorp/vault
   artifacthub.io/containsSecurityUpdates: "false"
-      
-  artifacthub.io/changes: |
-    - update app-version to v0.10.7
