@@ -75,8 +75,6 @@ jobs:
 
     - name: Install Helm
       uses: azure/setup-helm@v4
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Install helm-docs
       run: "curl --silent --show-error --fail --location --output /tmp/helm-docs.tar.gz \\\n     https://github.com/norwoodj/helm-docs/releases/download/v\"${HELM_DOCS_VERSION}\"/helm-docs_\"${HELM_DOCS_VERSION}\"_Linux_x86_64.tar.gz\ntar -xf /tmp/helm-docs.tar.gz helm-docs      \n     #magic___^_^___line\n"
