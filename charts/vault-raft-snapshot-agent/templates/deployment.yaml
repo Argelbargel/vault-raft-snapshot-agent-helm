@@ -63,6 +63,27 @@ spec:
               readOnly: {{ $volume.readOnly }}
               {{- end }}
             {{- end }}
+      {{ with .Values.deployment.initContainer }}
+      initContainers:
+      - name: {{  .name | default "Initialize Agent" }}
+        image: {{ .image | default "alpine:3.19.1" }}
+        {{- with .command }}
+        command: {{ tpl (toYaml .) $ | nindent 8 }}
+        {{- end }}
+        {{- with .env }}
+        env: {{ tpl (toYaml .) $ | nindent 8 }}
+        {{- end }}
+        {{- with $.Values.deployment.extraVolumes }}
+        volumeMounts:
+          {{- range $volume := $.Values.deployment.extraVolumes }}
+          - mountPath: {{ required "volume mountPath is required" $volume.mountPath }}
+            name: {{ required "volume name is required" $volume.name }}
+            {{- with $volume.readOnly }}
+            readOnly: {{ $volume.readOnly }}
+            {{- end }}
+          {{- end}}
+        {{- end }}
+      {{- end }}
       volumes:
         - name: config
           configMap:
