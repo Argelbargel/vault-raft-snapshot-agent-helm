@@ -65,7 +65,7 @@ spec:
             {{- end }}
       {{ with .Values.deployment.initContainer }}
       initContainers:
-      - name: {{  .name | default "Initialize Agent" }}
+      - name: {{  .name | default "initialize-agent" }}
         image: {{ .image | default "alpine:3.19.1" }}
         {{- with .command }}
         command: {{ tpl (toYaml .) $ | nindent 8 }}
