@@ -1,8 +1,8 @@
 apiVersion: v2
 name: vault-raft-snapshot-agent
 type: application
-version: 0.4.17
-appVersion: "v0.10.13"
+version: 0.4.18
+appVersion: "v0.10.14"
 description: Vault Raft Snapshot Agent takes periodic snapshots of Vault's Raft database and stores them on a local volume or an remote S3 bucket
 keywords:
 - vault-raft-snapshot-agent
@@ -21,7 +21,7 @@ annotations:
   artifacthub.io/license: MIT
   artifacthub.io/images: |
     - name: vault-raft-snapshot-agent
-      image: ghcr.io/argelbargel/vault-raft-snapshot-agent:v0.10.13
+      image: ghcr.io/argelbargel/vault-raft-snapshot-agent:v0.10.14
       platforms:
         - linux/amd64
         - linux/arm64
