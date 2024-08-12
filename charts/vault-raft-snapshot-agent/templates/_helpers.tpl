@@ -29,3 +29,14 @@ Allow the release namespace to be overridden
 {{- default .Release.Namespace (default dict (index .Values "global")).namespace -}}
 {{- end -}}
 
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "helm.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "vault-raft-snapshot-agent.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}
+
