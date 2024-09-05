@@ -46,6 +46,16 @@ deployment:
   #    UI of a Continuous Delivery Tool like Argo-CD
   revisionHistoryLimit:
 
+
+serviceAccount:
+  # -- Specifies whether a service account should be created
+  create: true
+  # -- name of the service account to use.
+  # @default -- chart name according to name settings. `.fullNameOverride` and `.nameOverride` are taken into account
+  name:
+  # -- Annotations to add to the service account
+  annotations: {}
+
 # -- Defines the contents of the configuration-file for vault-raft-snapshot-agent.
 #    Except for `local_storage` the keys and values are the same as in the agent's
 #    [configuration file](https://github.com/Argelbargel/vault-raft-snapshot-agent)

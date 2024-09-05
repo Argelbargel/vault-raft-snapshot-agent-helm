@@ -36,6 +36,7 @@ spec:
         {{- end }}
     spec:
       restartPolicy: Always
+      serviceAccountName: {{ include "helm.serviceAccountName" . }}
       containers:
         - name: {{ include "vault-raft-snapshot-agent.name" . }}
           {{- with .Values.deployment.image }}
@@ -48,6 +49,13 @@ spec:
           {{- if not (empty .Values.deployment.extraEnvFrom) }}
           envFrom: {{ toYaml .Values.deployment.extraEnvFrom | nindent 12 }}
           {{- end }}
+          resources:
+            limits:
+              cpu: {{ .Values.deployment.resources.limits.cpu }}
+              memory: {{ .Values.deployment.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.deployment.resources.requests.cpu }}
+              memory: {{ .Values.deployment.resources.requests.memory }}
           volumeMounts:
             - mountPath: /etc/vault.d/
               name: config
