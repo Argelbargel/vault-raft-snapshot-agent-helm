@@ -49,13 +49,27 @@ spec:
           {{- if not (empty .Values.deployment.extraEnvFrom) }}
           envFrom: {{ toYaml .Values.deployment.extraEnvFrom | nindent 12 }}
           {{- end }}
+          {{- if not (and (empty .Values.deployment.resources.limits) (empty .Values.deployment.resources.requests)) }}
           resources:
+            {{- with .Values.deployment.resources.limits }}
             limits:
-              cpu: {{ .Values.deployment.resources.limits.cpu }}
-              memory: {{ .Values.deployment.resources.limits.memory }}
+              {{- with .cpu }}
+              cpu: {{ . }}
+              {{- end }}
+              {{- with .memory }}
+              memory: {{ . }}
+              {{- end }}
+            {{- end }}
+            {{- with .Values.deployment.resources.requests }}
             requests:
-              cpu: {{ .Values.deployment.resources.requests.cpu }}
-              memory: {{ .Values.deployment.resources.requests.memory }}
+              {{- with .cpu }}
+              cpu: {{ . }}
+              {{- end }}
+              {{- with .memory }}
+              memory: {{ . }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
           volumeMounts:
             - mountPath: /etc/vault.d/
               name: config
