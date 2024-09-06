@@ -16,6 +16,7 @@ sources:
 - https://github.com/Argelbargel/vault-raft-snapshot-agent-helm/
 maintainers:
 - name: Argelbargel
+  url: https://github.com/Argelbargel
 annotations:
   artifacthub.io/category: security
   artifacthub.io/license: MIT
