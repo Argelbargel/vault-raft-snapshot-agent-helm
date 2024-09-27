@@ -69,6 +69,8 @@ config:
   # -- Url to the vault-API on the *leader* of your vault-cluster, e.g. `https?://vault-active.<vault-namespace>.svc.cluster.local:<vault-server service-port>`
   vault:
     url: http://127.0.0.1:8200
+    nodes:
+      autoDetectLeader: false
     auth:
       kubernetes:
         role: vault-raft-snapshot-agent
