@@ -1,6 +1,6 @@
 # vault-raft-snapshot-agent
 
-![Version: 0.4.22](https://img.shields.io/badge/Version-0.4.22-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.10.17](https://img.shields.io/badge/AppVersion-v0.10.17-informational?style=flat-square)
+![Version: 0.4.23](https://img.shields.io/badge/Version-0.4.23-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.10.18](https://img.shields.io/badge/AppVersion-v0.10.18-informational?style=flat-square)
 
 Vault Raft Snapshot Agent takes periodic snapshots of Vault's Raft database and stores them on a local volume or an remote S3 bucket
 
@@ -20,10 +20,10 @@ See [vault-raft-snapshot-agent's documentation](https://github.com/Argelbargel/v
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| config | object | `{"snapshots":{"frequency":"1h","retain":72,"storages":{"local":{"enabled":true,"volume":{"emptyDir":{}}}}},"vault":{"auth":{"kubernetes":{"role":"vault-raft-snapshot-agent"}},"url":"http://127.0.0.1:8200"}}` | Defines the contents of the configuration-file for vault-raft-snapshot-agent.    Except for `local_storage` the keys and values are the same as in the agent's    [configuration file](https://github.com/Argelbargel/vault-raft-snapshot-agent) |
+| config | object | `{"snapshots":{"frequency":"1h","retain":72,"storages":{"local":{"enabled":true,"volume":{"emptyDir":{}}}}},"vault":{"auth":{"kubernetes":{"role":"vault-raft-snapshot-agent"}},"nodes":{"autoDetectLeader":false},"url":"http://127.0.0.1:8200"}}` | Defines the contents of the configuration-file for vault-raft-snapshot-agent.    Except for `local_storage` the keys and values are the same as in the agent's    [configuration file](https://github.com/Argelbargel/vault-raft-snapshot-agent) |
 | config.snapshots.storages.local.enabled | bool | `true` | Enables/disables the local storage of snaphots.    If disabled the corresponding volume and volume-mounts will not be created |
 | config.snapshots.storages.local.volume | object | `{"emptyDir":{}}` | Defines the kind of volume used to store the snapshots locally.    If you specify `persistentVolumeClaim` the chart can generate the    PVC for you. Just specify the claim as you would [normally do](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#claims-as-volumes)    and add the property `create: true` and the relevant properties of your [PersistentVolumeClaimSpec]()    as key of `persistentVolumeClaim`. |
-| config.vault | object | `{"auth":{"kubernetes":{"role":"vault-raft-snapshot-agent"}},"url":"http://127.0.0.1:8200"}` | Url to the vault-API on the *leader* of your vault-cluster, e.g. `https?://vault-active.<vault-namespace>.svc.cluster.local:<vault-server service-port>` |
+| config.vault | object | `{"auth":{"kubernetes":{"role":"vault-raft-snapshot-agent"}},"nodes":{"autoDetectLeader":false},"url":"http://127.0.0.1:8200"}` | Url to the vault-API on the *leader* of your vault-cluster, e.g. `https?://vault-active.<vault-namespace>.svc.cluster.local:<vault-server service-port>` |
 | deployment.extraAnnotations | object | `{}` | additional annotation to add to the pod's metadata |
 | deployment.extraEnv | list | `[]` | additional environment-variables to add to the pod |
 | deployment.extraEnvFrom | list | `[]` | additional environment-refs to add to the pod |
