@@ -66,9 +66,9 @@ serviceAccount:
 #    Except for `local_storage` the keys and values are the same as in the agent's
 #    [configuration file](https://github.com/Argelbargel/vault-raft-snapshot-agent)
 config:
-  # -- Url to the vault-API on the *leader* of your vault-cluster, e.g. `https?://vault-active.<vault-namespace>.svc.cluster.local:<vault-server service-port>`
   vault:
     nodes:
+     # -- Urls to the vault-nodes. Recommended to use a single url always pointing to the *leader* of your vault-cluster, e.g. `https?://vault-active.<vault-namespace>.svc.cluster.local:<vault-server service-port>`
       urls:
       - http://127.0.0.1:8200
       autoDetectLeader: false
