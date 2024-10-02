@@ -10,11 +10,11 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     component: snapshot-agent
     {{- with .Values.deployment.extraLabels }}
-    {{ toYaml . | indent 4 }}
+    {{- toYaml . | nindent 4 }}
     {{- end }}
   {{- with .Values.deployment.extraAnnotations }}
   annotations:
-    {{ toYaml . | indent 4 }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   selector:
@@ -37,12 +37,12 @@ spec:
         app.kubernetes.io/managed-by: {{ .Release.Service }}
         component: snapshot-agent
         {{- with .Values.deployment.spec.extraLabels }}
-        {{ toYaml . | indent 8 }}
+        {{- toYaml . | nindent 8 }}
         {{- end }}
       annotations:
         checksum/config: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- with .Values.deployment.spec.extraAnnotations }}
-        {{ toYaml . | indent 8 }}
+        {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
       restartPolicy: Always
