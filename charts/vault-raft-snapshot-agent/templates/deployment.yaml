@@ -9,6 +9,13 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     component: snapshot-agent
+    {{- with .Values.deployment.extraLabels }}
+    {{ toYaml . | indent 4 }}
+    {{- end }}
+  {{- with .Values.deployment.extraAnnotations }}
+  annotations:
+    {{ toYaml . | indent 4 }}
+  {{- end }}
 spec:
   selector:
     matchLabels:
@@ -17,9 +24,9 @@ spec:
       component: snapshot-agent
   replicas: 1
   strategy:
-    type: {{ .Values.deployment.strategy.type }}
-  {{- with .Values.deployment.revisionHistoryLimit }}
-  revisionHistoryLimit: {{ .Values.deployment.revisionHistoryLimit }}
+    type: {{ .Values.deployment.spec.strategy.type }}
+  {{- with .Values.deployment.spec.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ .Values.deployment.spec.revisionHistoryLimit }}
   {{- end }}
   template:
     metadata:
@@ -29,29 +36,32 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/managed-by: {{ .Release.Service }}
         component: snapshot-agent
+        {{- with .Values.deployment.spec.extraLabels }}
+        {{ toYaml . | indent 8 }}
+        {{- end }}
       annotations:
         checksum/config: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum }}
-        {{- if .Values.deployment.extraAnnotations }}
-        {{ toYaml .Values.deployment.extraAnnotations | indent 8 }}
+        {{- with .Values.deployment.spec.extraAnnotations }}
+        {{ toYaml . | indent 8 }}
         {{- end }}
     spec:
       restartPolicy: Always
       serviceAccountName: {{ include "helm.serviceAccountName" . }}
       containers:
         - name: {{ include "vault-raft-snapshot-agent.name" . }}
-          {{- with .Values.deployment.image }}
+          {{- with .Values.deployment.spec.image }}
           image: {{ .repo }}:{{ .tag | default $.Chart.AppVersion }}
           imagePullPolicy: {{ .pullPolicy }}
           {{- end }}
-          {{- if not (empty .Values.deployment.extraEnv) }}
-          env: {{ toYaml .Values.deployment.extraEnv | nindent 12 }}
+          {{- if not (empty .Values.deployment.spec.extraEnv) }}
+          env: {{ toYaml .Values.deployment.spec.extraEnv | nindent 12 }}
           {{- end }}
-          {{- if not (empty .Values.deployment.extraEnvFrom) }}
-          envFrom: {{ toYaml .Values.deployment.extraEnvFrom | nindent 12 }}
+          {{- if not (empty .Values.deployment.spec.extraEnvFrom) }}
+          envFrom: {{ toYaml .Values.deployment.spec.extraEnvFrom | nindent 12 }}
           {{- end }}
-          {{- if not (and (empty .Values.deployment.resources.limits) (empty .Values.deployment.resources.requests)) }}
+          {{- if not (and (empty .Values.deployment.spec.resources.limits) (empty .Values.deployment.spec.resources.requests)) }}
           resources:
-            {{- with .Values.deployment.resources.limits }}
+            {{- with .Values.deployment.spec.resources.limits }}
             limits:
               {{- with .cpu }}
               cpu: {{ . }}
@@ -60,7 +70,7 @@ spec:
               memory: {{ . }}
               {{- end }}
             {{- end }}
-            {{- with .Values.deployment.resources.requests }}
+            {{- with .Values.deployment.spec.resources.requests }}
             requests:
               {{- with .cpu }}
               cpu: {{ . }}
@@ -78,14 +88,14 @@ spec:
             - mountPath: {{ .Values.config.snapshots.storages.local.path }}
               name: snapshots
             {{- end }}
-            {{- range $volume := .Values.deployment.extraVolumes }}
+            {{- range $volume := .Values.deployment.spec.extraVolumes }}
             - mountPath: {{ required "volume mountPath is required" $volume.mountPath }}
               name: {{ required "volume name is required" $volume.name }}
               {{- with $volume.readOnly }}
               readOnly: {{ $volume.readOnly }}
               {{- end }}
             {{- end }}
-      {{ with .Values.deployment.initContainer }}
+      {{ with .Values.deployment.spec.initContainer }}
       initContainers:
       - name: {{  .name | default "initialize-agent" }}
         image: {{ .image | default "alpine:3.19.1" }}
@@ -95,9 +105,9 @@ spec:
         {{- with .env }}
         env: {{ tpl (toYaml .) $ | nindent 8 }}
         {{- end }}
-        {{- with $.Values.deployment.extraVolumes }}
+        {{- with $.Values.deployment.spec.extraVolumes }}
         volumeMounts:
-          {{- range $volume := $.Values.deployment.extraVolumes }}
+          {{- range $volume := $.Values.deployment.spec.extraVolumes }}
           - mountPath: {{ required "volume mountPath is required" $volume.mountPath }}
             name: {{ required "volume name is required" $volume.name }}
             {{- with $volume.readOnly }}
@@ -121,7 +131,7 @@ spec:
           {{- end }}
           {{- end }}
         {{- end }}
-        {{- range $volume := .Values.deployment.extraVolumes }}
+        {{- range $volume := .Values.deployment.spec.extraVolumes }}
         - name: {{ required "volume name is required" (get $volume "name") }}
           {{- toYaml (omit $volume "name" "mountPath" "readOnly") | nindent 10 }}
         {{- end }}

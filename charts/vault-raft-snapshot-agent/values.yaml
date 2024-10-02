@@ -11,46 +11,53 @@ fullnameOverride:
 nameOverride:
 
 deployment:
-  # -- additional annotation to add to the pod's metadata
+  # -- additional labels to add to the deployment's metadata
+  extraLabels: {}
+  # -- additional annotation to add to the deployment's metadata
   extraAnnotations: {}
   # -- additional environment-variables to add to the pod
-  extraEnv: []
-  # -- additional environment-refs to add to the pod
-  extraEnvFrom: []
-  # -- additional volumes for the container. configures the pods `volumeMounts` and `volumes`-sections:
-  # <pre>- name: my-volume<br>  mountPath: /my-path<br>  emptyDir: {}</pre>
-  # `name` and `mountPath` are used both in `volumeMounts` and `volumes`, `readOnly` only applies to
-  # `volumeMounts` and any other key is added to `volumes` only
-  extraVolumes: []
-  strategy:
-    # -- Update-strategy for the agent's pods
-    #    `Recreate` guarantees that no two snapshots get taken at the same time
-    #    `RollingUpdate` ensures that there's always one instance of the agent running
-    type: "Recreate"
-  image:
-    # -- Image that is deployed (change e.g. for private registry-proxy)
-    repo: ghcr.io/argelbargel/vault-raft-snapshot-agent
-    # -- (string) the image's tag
-    # @default -- `.Chart.AppVersion`
-    tag:
-    # -- New releases of vault-raft-snapshot-agent always change the
-    #    `.Chart.AppVersion` of this chart thus must only be changed
-    #    if you use another repository than the default
-    pullPolicy: IfNotPresent
-  # -- resource limits and requests for the deployment
-  resources:
-    # -- resource limits of the deployment
-    limits: {}
-    # -- resource requests by the deployment
-    requests: {}
-  # -- specify optional init-container. Only properties `name`, `image`, `command` and `env` are used.
-  #    `name` and `image` are optional, by default alpine:3.19.1, which is the agents-base-image, is used as image
-  #    The init-container has access to all extraVolumes.
-  initContainer: {}
-  # -- (int) see [kubernetes docs](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy)
-  #    You might want to change this to a small value to avoid cluttering up the
-  #    UI of a Continuous Delivery Tool like Argo-CD
-  revisionHistoryLimit:
+  spec:
+    # -- additional labels to add to the pods's metadata
+    extraLabels: {}
+    # -- additional annotation to add to the pods's metadata
+    extraAnnotations: {}
+    extraEnv: []
+    # -- additional environment-refs to add to the pod
+    extraEnvFrom: []
+    # -- additional volumes for the container. configures the pods `volumeMounts` and `volumes`-sections:
+    # <pre>- name: my-volume<br>  mountPath: /my-path<br>  emptyDir: {}</pre>
+    # `name` and `mountPath` are used both in `volumeMounts` and `volumes`, `readOnly` only applies to
+    # `volumeMounts` and any other key is added to `volumes` only
+    extraVolumes: []
+    strategy:
+      # -- Update-strategy for the agent's pods
+      #    `Recreate` guarantees that no two snapshots get taken at the same time
+      #    `RollingUpdate` ensures that there's always one instance of the agent running
+      type: "Recreate"
+    image:
+      # -- Image that is deployed (change e.g. for private registry-proxy)
+      repo: ghcr.io/argelbargel/vault-raft-snapshot-agent
+      # -- (string) the image's tag
+      # @default -- `.Chart.AppVersion`
+      tag:
+      # -- New releases of vault-raft-snapshot-agent always change the
+      #    `.Chart.AppVersion` of this chart thus must only be changed
+      #    if you use another repository than the default
+      pullPolicy: IfNotPresent
+    # -- resource limits and requests for the deployment
+    resources:
+      # -- resource limits of the deployment
+      limits: {}
+      # -- resource requests by the deployment
+      requests: {}
+    # -- specify optional init-container. Only properties `name`, `image`, `command` and `env` are used.
+    #    `name` and `image` are optional, by default alpine:3.19.1, which is the agents-base-image, is used as image
+    #    The init-container has access to all extraVolumes.
+    initContainer: {}
+    # -- (int) see [kubernetes docs](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy)
+    #    You might want to change this to a small value to avoid cluttering up the
+    #    UI of a Continuous Delivery Tool like Argo-CD
+    revisionHistoryLimit:
 
 
 serviceAccount:
@@ -68,7 +75,7 @@ serviceAccount:
 config:
   vault:
     nodes:
-     # -- Urls to the vault-nodes. Recommended to use a single url always pointing to the *leader* of your vault-cluster, e.g. `https?://vault-active.<vault-namespace>.svc.cluster.local:<vault-server service-port>`
+      # -- Urls to the vault-nodes. Recommended to use a single url always pointing to the *leader* of your vault-cluster, e.g. `https?://vault-active.<vault-namespace>.svc.cluster.local:<vault-server service-port>`
       urls:
       - http://127.0.0.1:8200
       autoDetectLeader: false
