@@ -15,6 +15,42 @@ entries:
         - url: https://artifacthub.io/packages/helm/hashicorp/vault
     apiVersion: v2
     appVersion: v0.11.0
+    created: "2024-10-02T10:22:46.430221762Z"
+    description: Vault Raft Snapshot Agent takes periodic snapshots of Vault's Raft
+      database and stores them on a local volume or an remote S3 bucket
+    digest: a0d4c19c6d0c6946bc4634e832f975de0c23ec825891cbc143761c1be6c1958d
+    home: https://argelbargel.github.io/vault-raft-snapshot-agent-helm/
+    keywords:
+    - vault-raft-snapshot-agent
+    - vault
+    - backup
+    - snapshots
+    - raft
+    - integrated storage
+    maintainers:
+    - name: Argelbargel
+      url: https://github.com/Argelbargel
+    name: vault-raft-snapshot-agent
+    sources:
+    - https://github.com/Argelbargel/vault-raft-snapshot-agent-helm/
+    type: application
+    urls:
+    - https://github.com/Argelbargel/vault-raft-snapshot-agent-helm/releases/download/v0.2.33/vault-raft-snapshot-agent-0.5.1.tgz
+    version: 0.5.1
+  - annotations:
+      artifacthub.io/category: security
+      artifacthub.io/images: |
+        - name: vault-raft-snapshot-agent
+          image: ghcr.io/argelbargel/vault-raft-snapshot-agent:v0.11.0
+          platforms:
+            - linux/amd64
+            - linux/arm64
+            - linux/arm/v7
+      artifacthub.io/license: MIT
+      artifacthub.io/recommendations: |
+        - url: https://artifacthub.io/packages/helm/hashicorp/vault
+    apiVersion: v2
+    appVersion: v0.11.0
     created: "2024-10-02T09:47:46.415209508Z"
     description: Vault Raft Snapshot Agent takes periodic snapshots of Vault's Raft
       database and stores them on a local volume or an remote S3 bucket
@@ -1198,4 +1234,4 @@ entries:
     urls:
     - https://github.com/Argelbargel/vault-raft-snapshot-agent-helm/releases/download/v0.1.4/vault-raft-snapshot-agent-0.1.4.tgz
     version: 0.1.4
-generated: "2024-10-02T09:47:46.415562368Z"
+generated: "2024-10-02T10:22:46.430601219Z"
