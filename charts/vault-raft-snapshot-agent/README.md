@@ -1,6 +1,6 @@
 # vault-raft-snapshot-agent
 
-![Version: 0.5.2](https://img.shields.io/badge/Version-0.5.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.12.0](https://img.shields.io/badge/AppVersion-v0.12.0-informational?style=flat-square)
+![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.12.0](https://img.shields.io/badge/AppVersion-v0.12.0-informational?style=flat-square)
 
 Vault Raft Snapshot Agent takes periodic snapshots of Vault's Raft database and stores them on a local volume or an remote S3 bucket
 
@@ -20,7 +20,16 @@ See [vault-raft-snapshot-agent's documentation](https://github.com/Argelbargel/v
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| config | object | `{"snapshots":{"frequency":"1h","retain":72,"storages":{"local":{"enabled":true,"volume":{"emptyDir":{}}}}},"vault":{"auth":{"kubernetes":{"role":"vault-raft-snapshot-agent"}},"nodes":{"autoDetectLeader":false,"urls":["http://127.0.0.1:8200"]}}}` | Defines the contents of the configuration-file for vault-raft-snapshot-agent.    Except for `local_storage` the keys and values are the same as in the agent's    [configuration file](https://github.com/Argelbargel/vault-raft-snapshot-agent) |
+| config | object | `{"metrics":{"prometheus":{"enabled":false,"path":"/metrics","service":{"enabled":true,"extraLabels":{},"monitor":{"enabled":true,"extraLabels":{},"interval":"30s"},"port":2112}}},"snapshots":{"frequency":"1h","retain":72,"storages":{"local":{"enabled":true,"volume":{"emptyDir":{}}}}},"vault":{"auth":{"kubernetes":{"role":"vault-raft-snapshot-agent"}},"nodes":{"autoDetectLeader":false,"urls":["http://127.0.0.1:8200"]}}}` | Defines the contents of the configuration-file for vault-raft-snapshot-agent.    Except for `local_storage` the keys and values are the same as in the agent's    [configuration file](https://github.com/Argelbargel/vault-raft-snapshot-agent) |
+| config.metrics.prometheus.enabled | bool | `false` | enables the prometheus-metrics-endpoint |
+| config.metrics.prometheus.path | string | `"/metrics"` | path the prometheus-metrics-endpoint is exposed on |
+| config.metrics.prometheus.service.enabled | bool | `true` | enables the prometheus-metrics-service |
+| config.metrics.prometheus.service.extraLabels | object | `{}` | additional labels to add to the service's metadata |
+| config.metrics.prometheus.service.monitor | object | `{"enabled":true,"extraLabels":{},"interval":"30s"}` | settings for the service-monitor monitoring the prometheus-metrics-service |
+| config.metrics.prometheus.service.monitor.enabled | bool | `true` | enables the service-monitor, requires api-version "monitoring.coreos.com/v1" to be available |
+| config.metrics.prometheus.service.monitor.extraLabels | object | `{}` | additional labels to add to the service-monitor's metadata |
+| config.metrics.prometheus.service.monitor.interval | string | `"30s"` | interval in which the service-monitor scrapes the metrics-endpoint |
+| config.metrics.prometheus.service.port | int | `2112` | port the prometheus-metrics-service is exposed on |
 | config.snapshots.storages.local.enabled | bool | `true` | Enables/disables the local storage of snaphots.    If disabled the corresponding volume and volume-mounts will not be created |
 | config.snapshots.storages.local.volume | object | `{"emptyDir":{}}` | Defines the kind of volume used to store the snapshots locally.    If you specify `persistentVolumeClaim` the chart can generate the    PVC for you. Just specify the claim as you would [normally do](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#claims-as-volumes)    and add the property `create: true` and the relevant properties of your [PersistentVolumeClaimSpec]()    as key of `persistentVolumeClaim`. |
 | config.vault.nodes.urls | list | `["http://127.0.0.1:8200"]` | Urls to the vault-nodes. Recommended to use a single url always pointing to the *leader* of your vault-cluster, e.g. `https?://vault-active.<vault-namespace>.svc.cluster.local:<vault-server service-port>` |
