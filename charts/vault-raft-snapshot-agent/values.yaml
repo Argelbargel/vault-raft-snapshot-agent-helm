@@ -120,4 +120,3 @@ config:
           interval: 30s
           # -- additional labels to add to the service-monitor's metadata
           extraLabels: {}
-
