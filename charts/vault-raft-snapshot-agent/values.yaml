@@ -99,3 +99,25 @@ config:
         #    as key of `persistentVolumeClaim`.
         volume:
           emptyDir: {}
+  metrics:
+    prometheus:
+      # -- enables the prometheus-metrics-endpoint
+      enabled: false
+      # -- path the prometheus-metrics-endpoint is exposed on
+      path: /metrics
+      service:
+        # -- enables the prometheus-metrics-service
+        enabled: true
+        # -- port the prometheus-metrics-service is exposed on
+        port: 2112
+        # -- additional labels to add to the service's metadata
+        extraLabels: {}
+        # -- settings for the service-monitor monitoring the prometheus-metrics-service
+        monitor:
+          # -- enables the service-monitor, requires api-version "monitoring.coreos.com/v1" to be available
+          enabled: true
+          # -- interval in which the service-monitor scrapes the metrics-endpoint
+          interval: 30s
+          # -- additional labels to add to the service-monitor's metadata
+          extraLabels: {}
+

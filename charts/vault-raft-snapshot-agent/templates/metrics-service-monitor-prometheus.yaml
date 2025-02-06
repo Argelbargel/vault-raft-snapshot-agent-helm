@@ -1,0 +1,35 @@
+{{- $metrics := .Values.config.metrics -}}
+{{- if and (and $metrics.prometheus.enabled $metrics.prometheus.service.enabled) $metrics.prometheus.service.monitor.enabled }}
+{{- if .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "vault-raft-snapshot-agent.fullname" . }}-prometheus
+  namespace: {{ template "vault-raft-snapshot-agent.namespace" . }}
+  labels:
+    helm.sh/chart: {{ template "vault-raft-snapshot-agent.chart" . }}
+    app.kubernetes.io/name: {{ include "vault-raft-snapshot-agent.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    component: snapshot-agent
+    {{- with .Values.config.metrics.prometheus.service.extraLabels }}
+    {{- toYaml . | nindent 8 }}
+    {{- end }}
+spec:
+  endpoints:
+  - targetPort: {{ $metrics.prometheus.service.port }}
+    path: {{ $metrics.prometheus.path }}
+    interval: {{ $metrics.prometheus.service.monitor.interval }}
+  namespaceSelector:
+    matchNames:
+    - {{ template "vault-raft-snapshot-agent.namespace" . }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "vault-raft-snapshot-agent.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/managed-by: {{ .Release.Service }}
+      component: snapshot-agent
+      vrsa/metrics-type: prometheus
+{{- end }}
+{{- end }}

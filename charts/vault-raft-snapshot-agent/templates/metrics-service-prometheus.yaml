@@ -1,0 +1,27 @@
+{{- $metrics := .Values.config.metrics -}}
+{{- if and $metrics.prometheus.enabled $metrics.prometheus.service.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "vault-raft-snapshot-agent.fullname" . }}-prometheus
+  namespace: {{ template "vault-raft-snapshot-agent.namespace" . }}
+  labels:
+    helm.sh/chart: {{ template "vault-raft-snapshot-agent.chart" . }}
+    app.kubernetes.io/name: {{ include "vault-raft-snapshot-agent.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    component: snapshot-agent
+    vrsa/metrics-type: prometheus
+    {{- with $metrics.prometheus.service.extraLabels }}
+    {{- toYaml . | nindent 8 }}
+    {{- end }}
+spec:
+  ports:
+  - port: {{ $metrics.prometheus.service.port }}
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: {{ include "vault-raft-snapshot-agent.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    component: snapshot-agent
+{{- end }}
