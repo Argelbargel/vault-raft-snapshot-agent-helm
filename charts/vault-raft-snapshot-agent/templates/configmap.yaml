@@ -12,6 +12,13 @@ metadata:
 data:
   snapshots.yaml: |-
     {{- $config := deepCopy .Values.config -}}
+    {{- if $config.metrics.prometheus.enabled -}}
+    {{- $_ := unset $config.metrics.prometheus "enabled" -}}
+    {{- $_ := unset $config.metrics.prometheus "service" -}}
+    {{- $_ := set $config.metrics.prometheus "port" 2112 -}}
+    {{- else -}}
+    {{- $_ := unset $config.metrics "prometheus" -}}
+    {{- end -}}
     {{- if $config.snapshots.storages.local.enabled -}}
     {{- $_ := set $config.snapshots.storages "local" (pick $config.snapshots.storages.local "path") -}}
     {{- else -}}
