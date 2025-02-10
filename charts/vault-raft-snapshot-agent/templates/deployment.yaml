@@ -62,7 +62,7 @@ spec:
           {{- if .Values.config.metrics.prometheus.enabled }}
           ports:
             - containerPort: 2112
-              name: prometheus-metrics
+              name: prom-metrics
           {{- end }}
           {{- if not (and (empty .Values.deployment.spec.resources.limits) (empty .Values.deployment.spec.resources.requests)) }}
           resources:

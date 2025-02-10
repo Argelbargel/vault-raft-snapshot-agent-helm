@@ -18,7 +18,9 @@ metadata:
     {{- end }}
 spec:
   ports:
-  - port: {{ $metrics.prometheus.service.port }}
+  - name: prom-metrics
+    port: {{ $metrics.prometheus.service.port }}
+    targetPort: prom-metrics
     protocol: TCP
   selector:
     app.kubernetes.io/name: {{ include "vault-raft-snapshot-agent.name" . }}
