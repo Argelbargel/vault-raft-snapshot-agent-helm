@@ -85,5 +85,5 @@ jobs:
     - name: Install charts
       if: steps.changes.outputs.changed != 'false'
       run: |
-        ct install ${{steps.params.outputs.params }}
+        ct install ${{steps.params.outputs.params }} --helm-extra-set-args "--set="config.metrics.prometheus.enabled=true"
 
