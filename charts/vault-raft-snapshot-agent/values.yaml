@@ -3,10 +3,11 @@ global:
   # @default -- `.Release.Namespace`
   namespace:
 
-    # -- overrides the generated full-name for generated resources
-    # @default -- release-name + chart-name truncated to 63 chars
-fullnameOverride: # -- overrides the generated name for generated resources
+# -- overrides the generated full-name for generated resources
+# @default -- release-name + chart-name truncated to 63 chars
+fullnameOverride:
 
+# -- overrides the generated name for generated resources
 # @default -- `.Chart.Name`
 nameOverride:
 
@@ -39,8 +40,9 @@ deployment:
       repo: ghcr.io/argelbargel/vault-raft-snapshot-agent
       # -- (string) the image's tag
       # @default -- `.Chart.AppVersion`
-      tag: # -- New releases of vault-raft-snapshot-agent always change the
+      tag: 
 
+      # -- New releases of vault-raft-snapshot-agent always change the
       #    `.Chart.AppVersion` of this chart thus must only be changed
       #    if you use another repository than the default
       pullPolicy: IfNotPresent
@@ -65,8 +67,9 @@ serviceAccount:
   create: true
   # -- name of the service account to use.
   # @default -- chart name according to name settings. `.fullNameOverride` and `.nameOverride` are taken into account
-  name: # -- Annotations to add to the service account
+  name: 
 
+  # -- Annotations to add to the service account
   annotations: {}
 
 # -- Defines the contents of the configuration-file for vault-raft-snapshot-agent.
