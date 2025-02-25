@@ -1,6 +1,6 @@
 # vault-raft-snapshot-agent
 
-![Version: 0.6.3](https://img.shields.io/badge/Version-0.6.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.12.1](https://img.shields.io/badge/AppVersion-v0.12.1-informational?style=flat-square)
+![Version: 0.6.4](https://img.shields.io/badge/Version-0.6.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.12.1](https://img.shields.io/badge/AppVersion-v0.12.1-informational?style=flat-square)
 
 Vault Raft Snapshot Agent takes periodic snapshots of Vault's Raft database and stores them on a local volume or an remote S3 bucket
 
@@ -20,14 +20,15 @@ See [vault-raft-snapshot-agent's documentation](https://github.com/Argelbargel/v
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| config | object | `{"metrics":{"prometheus":{"enabled":false,"path":"/metrics","service":{"enabled":true,"extraLabels":{},"monitor":{"enabled":true,"extraLabels":{},"interval":"30s"},"port":2112}}},"snapshots":{"frequency":"1h","retain":72,"storages":{"local":{"enabled":true,"volume":{"emptyDir":{}}}}},"vault":{"auth":{"kubernetes":{"role":"vault-raft-snapshot-agent"}},"nodes":{"autoDetectLeader":false,"urls":["http://127.0.0.1:8200"]}}}` | Defines the contents of the configuration-file for vault-raft-snapshot-agent.    Except for `local_storage` the keys and values are the same as in the agent's    [configuration file](https://github.com/Argelbargel/vault-raft-snapshot-agent) |
+| config | object | `{"metrics":{"prometheus":{"enabled":false,"path":"/metrics","service":{"enabled":true,"extraLabels":{},"monitor":{"enabled":true,"extraLabels":{},"force":false,"interval":"30s"},"port":2112}}},"snapshots":{"frequency":"1h","retain":72,"storages":{"local":{"enabled":true,"volume":{"emptyDir":{}}}}},"vault":{"auth":{"kubernetes":{"role":"vault-raft-snapshot-agent"}},"nodes":{"autoDetectLeader":false,"urls":["http://127.0.0.1:8200"]}}}` | Defines the contents of the configuration-file for vault-raft-snapshot-agent.    Except for `local_storage` the keys and values are the same as in the agent's    [configuration file](https://github.com/Argelbargel/vault-raft-snapshot-agent) |
 | config.metrics.prometheus.enabled | bool | `false` | enables the prometheus-metrics-endpoint |
 | config.metrics.prometheus.path | string | `"/metrics"` | path the prometheus-metrics-endpoint is exposed on |
 | config.metrics.prometheus.service.enabled | bool | `true` | enables the prometheus-metrics-service |
 | config.metrics.prometheus.service.extraLabels | object | `{}` | additional labels to add to the service's metadata |
-| config.metrics.prometheus.service.monitor | object | `{"enabled":true,"extraLabels":{},"interval":"30s"}` | settings for the service-monitor monitoring the prometheus-metrics-service |
+| config.metrics.prometheus.service.monitor | object | `{"enabled":true,"extraLabels":{},"force":false,"interval":"30s"}` | settings for the service-monitor monitoring the prometheus-metrics-service |
 | config.metrics.prometheus.service.monitor.enabled | bool | `true` | enables the service-monitor, requires api-version "monitoring.coreos.com/v1" to be available |
 | config.metrics.prometheus.service.monitor.extraLabels | object | `{}` | additional labels to add to the service-monitor's metadata |
+| config.metrics.prometheus.service.monitor.force | bool | `false` | whether to force installation of service-monitor even when the required crds seem to be missing |
 | config.metrics.prometheus.service.monitor.interval | string | `"30s"` | interval in which the service-monitor scrapes the metrics-endpoint |
 | config.metrics.prometheus.service.port | int | `2112` | port the prometheus-metrics-service is exposed on |
 | config.snapshots.storages.local.enabled | bool | `true` | Enables/disables the local storage of snaphots.    If disabled the corresponding volume and volume-mounts will not be created |
