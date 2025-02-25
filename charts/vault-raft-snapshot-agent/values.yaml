@@ -40,7 +40,7 @@ deployment:
       repo: ghcr.io/argelbargel/vault-raft-snapshot-agent
       # -- (string) the image's tag
       # @default -- `.Chart.AppVersion`
-      tag: 
+      tag:
 
       # -- New releases of vault-raft-snapshot-agent always change the
       #    `.Chart.AppVersion` of this chart thus must only be changed
@@ -67,7 +67,7 @@ serviceAccount:
   create: true
   # -- name of the service account to use.
   # @default -- chart name according to name settings. `.fullNameOverride` and `.nameOverride` are taken into account
-  name: 
+  name:
 
   # -- Annotations to add to the service account
   annotations: {}
