@@ -1,6 +1,6 @@
 {{- $metrics := .Values.config.metrics -}}
 {{- if and (and $metrics.prometheus.enabled $metrics.prometheus.service.enabled) $metrics.prometheus.service.monitor.enabled }}
-{{- if .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" }}
+{{- if or $metrics.prometheus.service.monitor.force (.Capabilities.APIVersions.Has "monitoring.coreos.com/v1") }}
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
