@@ -1,6 +1,6 @@
 # vault-raft-snapshot-agent
 
-![Version: 0.4.21](https://img.shields.io/badge/Version-0.4.21-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.10.16](https://img.shields.io/badge/AppVersion-v0.10.16-informational?style=flat-square)
+![Version: 0.4.10](https://img.shields.io/badge/Version-0.4.10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.10.7](https://img.shields.io/badge/AppVersion-v0.10.7-informational?style=flat-square)
 
 Vault Raft Snapshot Agent takes periodic snapshots of Vault's Raft database and stores them on a local volume or an remote S3 bucket
 
@@ -31,18 +31,11 @@ See [vault-raft-snapshot-agent's documentation](https://github.com/Argelbargel/v
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | New releases of vault-raft-snapshot-agent always change the    `.Chart.AppVersion` of this chart thus must only be changed    if you use another repository than the default |
 | deployment.image.repo | string | `"ghcr.io/argelbargel/vault-raft-snapshot-agent"` | Image that is deployed (change e.g. for private registry-proxy) |
 | deployment.image.tag | string | `.Chart.AppVersion` | the image's tag |
-| deployment.initContainer | object | `{}` | specify optional init-container. Only properties `name`, `image`, `command` and `env` are used.    `name` and `image` are optional, by default alpine:3.19.1, which is the agents-base-image, is used as image    The init-container has access to all extraVolumes. |
-| deployment.resources | object | `{"limits":{},"requests":{}}` | resource limits and requests for the deployment |
-| deployment.resources.limits | object | `{}` | resource limits of the deployment |
-| deployment.resources.requests | object | `{}` | resource requests by the deployment |
 | deployment.revisionHistoryLimit | int | `nil` | see [kubernetes docs](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy)    You might want to change this to a small value to avoid cluttering up the    UI of a Continuous Delivery Tool like Argo-CD |
 | deployment.strategy.type | string | `"Recreate"` | Update-strategy for the agent's pods    `Recreate` guarantees that no two snapshots get taken at the same time    `RollingUpdate` ensures that there's always one instance of the agent running |
 | fullnameOverride | string | release-name + chart-name truncated to 63 chars | overrides the generated full-name for generated resources |
 | global.namespace | string | `.Release.Namespace` | allows to override the release's namespace |
 | nameOverride | string | `.Chart.Name` | overrides the generated name for generated resources |
-| serviceAccount.annotations | object | `{}` | Annotations to add to the service account |
-| serviceAccount.create | bool | `true` | Specifies whether a service account should be created |
-| serviceAccount.name | string | chart name according to name settings. `.fullNameOverride` and `.nameOverride` are taken into account | name of the service account to use. |
 
 ## License
 - Source code is licensed under MIT
